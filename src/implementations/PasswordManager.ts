@@ -1,4 +1,4 @@
-import { PasswordManager } from '../core/interfaces/PasswordManager';
+import { PasswordManager } from '../../core/interfaces/PasswordManager';
 
 export function buildPasswordManager(): PasswordManager {
   return {

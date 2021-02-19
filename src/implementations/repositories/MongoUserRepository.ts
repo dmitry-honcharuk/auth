@@ -1,5 +1,5 @@
-import { User } from '../../core/entities/user';
-import { UserRepository } from '../../core/interfaces/UserRepository';
+import { User } from '../../../core/entities/user';
+import { UserRepository } from '../../../core/interfaces/UserRepository';
 
 export function buildMemoryUserRepository(): UserRepository {
   const users: User[] = [];

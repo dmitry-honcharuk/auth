@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ValidationError } from '../../core/errors/ValidationError';
-import { buildRegisterUseCase } from '../../core/use-cases/register';
+import { ValidationError } from '../../../core/errors/ValidationError';
+import { buildRegisterUseCase } from '../../../core/use-cases/register';
 import { passwordManager } from '../../dependencies/passwordManager';
 import { userRepository } from '../../dependencies/repositories';
 
