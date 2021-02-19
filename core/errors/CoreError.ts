@@ -4,6 +4,6 @@ export class CoreError extends Error {
     Object.setPrototypeOf(this, CoreError.prototype);
 
     this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
+    this.stack = new Error().stack;
   }
 }

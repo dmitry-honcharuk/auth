@@ -1,3 +1,3 @@
-import { buildMongoUserRepository } from '../repositories/MongoUserRepository';
+import { buildMemoryUserRepository } from '../implementations/repositories/MongoUserRepository';
 
-export const userRepository = buildMongoUserRepository();
+export const userRepository = buildMemoryUserRepository();
