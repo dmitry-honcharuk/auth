@@ -28,6 +28,7 @@ export function buildLoginUseCase(deps: Dependencies) {
       return new WrongPasswordError();
     }
 
+    // @TODO Type is not erroring on public / full user
     return user;
   };
 }

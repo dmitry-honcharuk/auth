@@ -1,8 +1,7 @@
-export interface PublicUser {
+export type User = {
   id: string;
   email: string;
-}
-
-export interface User extends PublicUser {
   password: string;
-}
+};
+
+export type PublicUser = Omit<User, 'password'>;
