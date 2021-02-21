@@ -6,6 +6,6 @@ export class ValidationError extends CoreError {
     Object.setPrototypeOf(this, ValidationError.prototype);
 
     this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
+    this.stack = new Error().stack;
   }
 }

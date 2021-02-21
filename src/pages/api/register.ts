@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ValidationError } from '../../core/errors/ValidationError';
-import { buildRegisterUseCase } from '../../core/use-cases/register';
+import { ValidationError } from '../../../core/errors/ValidationError';
+import { buildRegisterUseCase } from '../../../core/use-cases/register';
+import { passwordManager } from '../../dependencies/passwordManager';
 import { userRepository } from '../../dependencies/repositories';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
@@ -14,6 +15,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   const response = await buildRegisterUseCase({
     userRepository,
+    passwordManager,
   })(body);
 
   if (response instanceof ValidationError) {
