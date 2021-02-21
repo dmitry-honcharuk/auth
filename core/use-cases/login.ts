@@ -1,4 +1,4 @@
-import { PublicUser } from '../entities/user';
+import { castUserToPublic, PublicUser } from '../entities/user';
 import { CoreError } from '../errors/CoreError';
 import { NoSuchUserError } from '../errors/NoSuchUserError';
 import { ValidationError } from '../errors/ValidationError';
@@ -28,8 +28,7 @@ export function buildLoginUseCase(deps: Dependencies) {
       return new WrongPasswordError();
     }
 
-    // @TODO Type is not erroring on public / full user
-    return user;
+    return castUserToPublic(user);
   };
 }
 

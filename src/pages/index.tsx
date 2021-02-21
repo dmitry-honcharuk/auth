@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useReducer, useState } from 'react';
+import { post } from '../services/api';
 import styles from '../styles/Home.module.css';
 
 const initialAuthState = {
@@ -49,26 +50,10 @@ export default function Home() {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
   const createUser = () =>
-    fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: state.registrationEmail,
-        password: state.registrationPassword,
-      }),
+    post('/api/register', {
+      email: state.registrationEmail,
+      password: state.registrationPassword,
     })
-      .then((r) => {
-        console.log(r);
-
-        if (!r.ok) {
-          throw r;
-        }
-
-        return r;
-      })
-      .then((r) => r.json())
       .then((r) => {
         setUserId(r.id);
         setError('');
@@ -82,26 +67,10 @@ export default function Home() {
       });
 
   const login = () =>
-    fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: state.loginEmail,
-        password: state.loginPassword,
-      }),
+    post('/api/login', {
+      email: state.loginEmail,
+      password: state.loginPassword,
     })
-      .then((r) => {
-        console.log(r);
-
-        if (!r.ok) {
-          throw r;
-        }
-
-        return r;
-      })
-      .then((r) => r.json())
       .then((r) => {
         setUserId(r.user.id);
         setError('');

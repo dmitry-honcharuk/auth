@@ -11,9 +11,6 @@ export function buildMemoryUserRepository(): UserRepository {
 
       users.push(user);
 
-      console.log('USERS');
-      console.log(users);
-
       return user;
     },
     getUserByEmail: async (email) =>
