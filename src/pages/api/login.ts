@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CoreError } from '../../../core/errors/CoreError';
-import { buildLoginUseCase } from '../../../core/use-cases/login';
+import { CoreError } from '../../../core/backend/errors/CoreError';
+import { buildLoginUseCase } from '../../../core/backend/use-cases/login';
 import { passwordManager } from '../../dependencies/passwordManager';
 import { userRepository } from '../../dependencies/repositories';
 

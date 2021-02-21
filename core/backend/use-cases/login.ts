@@ -1,4 +1,4 @@
-import { castUserToPublic, PublicUser } from '../entities/user';
+import { castUserToPublic, PublicUser } from '../../entities/user';
 import { CoreError } from '../errors/CoreError';
 import { NoSuchUserError } from '../errors/NoSuchUserError';
 import { ValidationError } from '../errors/ValidationError';
