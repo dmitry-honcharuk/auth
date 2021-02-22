@@ -1,9 +1,10 @@
-import { PasswordManager } from '../../core/backend/interfaces/PasswordManager';
+import { PasswordManager } from '../../core/interfaces/PasswordManager';
 
 export function buildPasswordManager(): PasswordManager {
   return {
     hashPassword,
-    isPasswordValid: (attempt, hashed) => hashPassword(attempt) === hashed,
+    isPasswordValid: (attempt: string, hashed: string) =>
+      hashPassword(attempt) === hashed,
   };
 }
 
