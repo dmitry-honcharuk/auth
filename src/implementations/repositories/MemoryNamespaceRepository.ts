@@ -7,9 +7,7 @@ export function createMemoryNamespaceRepository(): NamespaceRepository {
 
   return {
     getNamespaces: async () => {
-      console.log('-   NAMESPACES   -');
-      console.log(namespaces);
-      console.log('-!!!NAMESPACES!!!-');
+      log(namespaces);
 
       return namespaces;
     },
@@ -27,11 +25,15 @@ export function createMemoryNamespaceRepository(): NamespaceRepository {
 
       namespaces.push(namespace);
 
-      console.log('-   NAMESPACES   -');
-      console.log(namespaces);
-      console.log('-!!!NAMESPACES!!!-');
+      log(namespaces);
 
       return namespace;
     },
   };
 }
+
+const log = (stuf: Namespace[]) => {
+  console.log('-   NAMESPACES   -');
+  console.log(stuf);
+  console.log('-!!!NAMESPACES!!!-');
+};

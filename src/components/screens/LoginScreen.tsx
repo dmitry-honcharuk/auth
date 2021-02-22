@@ -3,8 +3,8 @@ import { isEmpty } from 'ramda';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { login } from '../../services/auth';
-import { Centered } from '../common/Centered';
 import styles from './auth-page.module.css';
+import { Centered } from './common/Centered';
 
 type FormState = { email: string; password: string };
 
