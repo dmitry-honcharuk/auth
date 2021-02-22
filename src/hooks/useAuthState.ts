@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { get } from '../services/api';
+import { getCurrentUser } from '../services/auth';
 
 enum State {
   Pending,
@@ -13,7 +13,7 @@ export function useAuthState() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const { user } = await get('/api/current');
+        const { user } = await getCurrentUser();
 
         setState(user ? State.LoggedIn : State.LoggedOut);
       } catch (e) {

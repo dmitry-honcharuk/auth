@@ -1,3 +1,14 @@
+import { useLogout } from '../../hooks/useLogout';
+
 export default function Dashboard() {
-  return <h1>Dashboard</h1>;
+  const logout = useLogout();
+
+  return (
+    <div>
+      <div>
+        <button onClick={logout}>Logout</button>
+      </div>
+      <h1>Dashboard</h1>
+    </div>
+  );
 }
