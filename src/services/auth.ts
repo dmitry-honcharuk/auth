@@ -1,7 +1,15 @@
-import { post } from './api';
+import { get, post } from './api';
 
 export function login(creds: Creds) {
   return post('/api/login', creds);
+}
+
+export function logout() {
+  return post('/api/logout', {});
+}
+
+export function getCurrentUser() {
+  return get('/api/current');
 }
 
 type Creds = {
