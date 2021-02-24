@@ -3,7 +3,10 @@ import { EntityAlredyExistsError } from '../../../core/errors/EntityAlredyExists
 import { NamespaceRepository } from '../../../core/interfaces/NamespaceRepository';
 
 export function createMemoryNamespaceRepository(): NamespaceRepository {
-  const namespaces: Namespace[] = [];
+  const namespaces: Namespace[] = [
+    { id: '1', name: 'First' },
+    { id: '2', name: 'Second' },
+  ];
 
   return {
     getNamespaces: async () => {
