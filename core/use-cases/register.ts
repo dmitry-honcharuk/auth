@@ -38,6 +38,8 @@ export function buildRegisterUseCase(deps: Dependencies) {
     const user = await userRepository.saveUser({
       email,
       password: hashedPassword,
+      // @TODO fix namespace
+      namespace: '',
     });
 
     return user.id;

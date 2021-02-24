@@ -1,9 +1,9 @@
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import 'tailwindcss/tailwind.css';
 import { LoadingScreen } from '../components/screens/LoadingScreen';
 import { useAuthState } from '../hooks/useAuthState';
-import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { isPending, isLoggedIn } = useAuthState();
