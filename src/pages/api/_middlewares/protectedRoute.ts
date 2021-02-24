@@ -1,13 +1,16 @@
-import { use } from './use';
+import { NextApiRequest, NextApiResponse } from 'next';
+import nc from 'next-connect';
 import { withUser } from './withUser';
 
-export const protectedRoute = use(withUser, (req, res, next) => {
-  const { user } = req;
+export const protectedRoute = nc<NextApiRequest, NextApiResponse>()
+  .use(withUser)
+  .use((req, res, next) => {
+    const { user } = req;
 
-  if (user) {
-    next();
-    return;
-  }
+    if (user) {
+      next();
+      return;
+    }
 
-  res.status(401).end();
-});
+    res.status(401).end();
+  });
