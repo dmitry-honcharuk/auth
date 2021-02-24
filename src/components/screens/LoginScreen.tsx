@@ -3,7 +3,8 @@ import { isEmpty } from 'ramda';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { login } from '../../services/auth';
-import { Centered } from './common/Centered';
+import { Button } from '../common/Button';
+import { Centered } from '../common/Centered';
 
 type FormState = { email: string; password: string };
 
@@ -54,12 +55,7 @@ export function LoginScreen() {
         </div>
 
         <div className='relative flex justify-end mt-3'>
-          <button
-            type='submit'
-            className='border-2 border-black focus:outline-none px-3 py-1.5 hover:bg-gray-500 hover:text-white transition-colors'
-          >
-            Sign in
-          </button>
+          <Button type='submit'>Sign in</Button>
 
           {(error || !isEmpty(errors)) && (
             <div className='absolute -bottom-10 w-full text-center text-xs text-pink-600'>

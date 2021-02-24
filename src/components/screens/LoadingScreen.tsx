@@ -1,4 +1,4 @@
-import { Centered } from './common/Centered';
+import { Centered } from '../common/Centered';
 
 export function LoadingScreen() {
   return (
