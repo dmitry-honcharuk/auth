@@ -9,4 +9,5 @@ export interface UserRepository {
 type SaveUserOptions = {
   email: string;
   password: string;
+  namespace: string;
 };

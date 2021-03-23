@@ -1,0 +1,41 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import nc from 'next-connect';
+import { createAddNamespaceUseCase } from '../../../core/use-cases/add-namespace';
+import { createListNamespacesUseCase } from '../../../core/use-cases/list-namespaces';
+import { isCoreError } from '../../../core/utils';
+import { namespaceRepository } from '../../dependencies/repositories';
+import { protectedRoute } from './_middlewares/protectedRoute';
+
+export default nc<NextApiRequest, NextApiResponse>()
+  .use(protectedRoute)
+  .get(async (req, res) => {
+    const { user } = req;
+
+    const getAllNamespaces = createListNamespacesUseCase({
+      namespaceRepository,
+    });
+
+    res.status(200).json(await getAllNamespaces({ currentUser: user }));
+  })
+  .post(async (req, res) => {
+    const {
+      body: { name },
+      user,
+    } = req;
+
+    const addNamespace = createAddNamespaceUseCase({
+      namespaceRepository,
+    });
+
+    const result = await addNamespace({
+      name,
+      currentUser: user,
+    });
+
+    if (isCoreError(result)) {
+      res.status(400).json({ message: result.message });
+      return;
+    }
+
+    res.json(result);
+  });

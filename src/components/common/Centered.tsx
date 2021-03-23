@@ -1,10 +1,11 @@
 import { FunctionComponent } from 'react';
-import styles from './centered.module.css';
 
 export const Centered: FunctionComponent = ({ children }) => {
   return (
-    <div className={styles.root}>
-      <div className={styles.content}>{children}</div>
+    <div className='h-screen flex items-center'>
+      <div className='w-full flex justify-center -translate-y-1/2'>
+        {children}
+      </div>
     </div>
   );
 };
