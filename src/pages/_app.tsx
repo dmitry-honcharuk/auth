@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!isPending && !isLoggedIn) {
+    if (!isPending && !isLoggedIn && router.pathname.startsWith('/admin')) {
       router.push('/admin/sign-in');
     }
   }, [isPending, isLoggedIn]);

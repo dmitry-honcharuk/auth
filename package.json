@@ -9,6 +9,7 @@
     "export": "yarn build && next export"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^1.3.0",
     "classnames": "^2.2.6",
     "cookies": "^0.8.0",
     "jsonwebtoken": "^8.5.1",
