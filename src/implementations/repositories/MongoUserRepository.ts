@@ -13,6 +13,7 @@ export function buildMongoUserRepository(): UserRepository {
     isEmailTaken,
     saveUser,
     getUserByEmail,
+    getUserInNamespaceByEmail,
   };
 }
 
@@ -53,6 +54,24 @@ async function getUserByEmail(email: string): Promise<UserEntity | null> {
   const users = await getUsersCollection();
 
   const entry = await users.findOne({ email });
+
+  if (!entry) return null;
+
+  const { _id, ...user } = entry;
+
+  return {
+    id: entry._id.toHexString(),
+    ...user,
+  };
+}
+
+async function getUserInNamespaceByEmail(
+  namespace: string,
+  email: string,
+): Promise<UserEntity | null> {
+  const users = await getUsersCollection();
+
+  const entry = await users.findOne({ email, namespace });
 
   if (!entry) return null;
 

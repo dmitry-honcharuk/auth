@@ -1,36 +1,39 @@
-import { CoreError } from '../errors/CoreError';
-import { ValidationError } from '../errors/ValidationError';
-import { PasswordManager } from '../interfaces/PasswordManager';
-import { UserRepository } from '../interfaces/UserRepository';
-import { validateEmail, validatePassword } from '../validation';
+import { ValidationError } from '../../errors/ValidationError';
+import { PasswordManager } from '../../interfaces/PasswordManager';
+import { UserRepository } from '../../interfaces/UserRepository';
+import { validateEmail, validatePassword } from '../../validation';
 
 export function buildRegisterUseCase(deps: Dependencies) {
   const { userRepository, passwordManager } = deps;
 
-  return async ({ email, password }: Input): Promise<Output> => {
+  return async ({ email, password, clientId }: Input): Promise<Output> => {
+    if (!clientId) {
+      throw new ValidationError('Client id is required');
+    }
+
     if (!email) {
-      return new ValidationError('Email is required');
+      throw new ValidationError('Email is required');
     }
 
     if (!password) {
-      return new ValidationError('Password is required');
+      throw new ValidationError('Password is required');
     }
 
     const emailError = validateEmail(email);
     if (emailError) {
-      return emailError;
+      throw emailError;
     }
 
     const passwordError = validatePassword(password);
     if (passwordError) {
-      return passwordError;
+      throw passwordError;
     }
 
     const emailTaken = await userRepository.isEmailTaken(email);
 
     if (emailTaken) {
       // @TODO Redo flow as this message is bad for security reasons
-      return new ValidationError('Email is taken');
+      throw new ValidationError('Email is taken');
     }
 
     const hashedPassword = passwordManager.hashPassword(password);
@@ -39,7 +42,7 @@ export function buildRegisterUseCase(deps: Dependencies) {
       email,
       password: hashedPassword,
       // @TODO fix namespace
-      namespace: '',
+      namespace: clientId,
     });
 
     return user.id;
@@ -53,6 +56,7 @@ type Dependencies = {
 interface Input {
   email?: string;
   password?: string;
+  clientId?: string;
 }
 
-type Output = Promise<string | CoreError>;
+type Output = string;
