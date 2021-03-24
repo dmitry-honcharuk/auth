@@ -1,14 +1,16 @@
-import { castUserToPublic, PublicUser } from '../../entities/user';
+import { userToAuthDTO } from '../../entities/user';
 import { NoSuchUserError } from '../../errors/NoSuchUserError';
 import { ValidationError } from '../../errors/ValidationError';
 import { WrongPasswordError } from '../../errors/WrongPasswordError';
+import { generateSecret } from '../../hasher';
 import { PasswordManager } from '../../interfaces/PasswordManager';
 import { UserRepository } from '../../interfaces/UserRepository';
+import { getToken } from '../../utils/jwt';
 
 export function buildLoginUseCase(deps: Dependencies) {
   const { userRepository, passwordManager } = deps;
 
-  return async ({ email, password, clientId }: Input): Promise<Output> => {
+  return async ({ email, password, clientId }: Input): Promise<string> => {
     if (!clientId) {
       throw new ValidationError('Client id is required');
     }
@@ -34,7 +36,12 @@ export function buildLoginUseCase(deps: Dependencies) {
       throw new WrongPasswordError();
     }
 
-    return castUserToPublic(user);
+    const secret = generateSecret();
+
+    // @TODO add expiration + refresh?
+    const token = await getToken(userToAuthDTO(user), secret);
+
+    return token;
   };
 }
 
@@ -47,4 +54,3 @@ interface Input {
   password?: string;
   clientId?: string;
 }
-type Output = PublicUser;

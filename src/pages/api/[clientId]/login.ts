@@ -20,7 +20,7 @@ async function loginUser(req: NextApiRequest, res: NextApiResponse) {
     passwordManager,
   });
 
-  const result = await loginEndUser({ email, password, clientId });
+  const token = await loginEndUser({ email, password, clientId });
 
-  return res.json(result);
+  return res.json({ token });
 }

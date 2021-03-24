@@ -1,12 +1,15 @@
+import { userToAuthDTO } from '../../entities/user';
 import { ValidationError } from '../../errors/ValidationError';
+import { generateSecret } from '../../hasher';
 import { PasswordManager } from '../../interfaces/PasswordManager';
 import { UserRepository } from '../../interfaces/UserRepository';
+import { getToken } from '../../utils/jwt';
 import { validateEmail, validatePassword } from '../../validation';
 
 export function buildRegisterUseCase(deps: Dependencies) {
   const { userRepository, passwordManager } = deps;
 
-  return async ({ email, password, clientId }: Input): Promise<Output> => {
+  return async ({ email, password, clientId }: Input): Promise<string> => {
     if (!clientId) {
       throw new ValidationError('Client id is required');
     }
@@ -45,7 +48,9 @@ export function buildRegisterUseCase(deps: Dependencies) {
       namespace: clientId,
     });
 
-    return user.id;
+    const token = await getToken(userToAuthDTO(user), generateSecret());
+
+    return token;
   };
 }
 
@@ -58,5 +63,3 @@ interface Input {
   password?: string;
   clientId?: string;
 }
-
-type Output = string;
