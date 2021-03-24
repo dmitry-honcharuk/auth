@@ -1,12 +1,16 @@
-import { User } from '../entities/user';
+import { UserEntity } from '../entities/user';
 
 export interface UserRepository {
   isEmailTaken(email: string): Promise<boolean>;
-  saveUser(options: SaveUserOptions): Promise<User>;
-  getUserByEmail(email: string): Promise<null | User>;
+  saveUser(options: SaveUserInput): Promise<UserEntity>;
+  getUserByEmail(email: string): Promise<null | UserEntity>;
+  getUserInNamespaceByEmail(
+    namespace: string,
+    email: string,
+  ): Promise<null | UserEntity>;
 }
 
-type SaveUserOptions = {
+export type SaveUserInput = {
   email: string;
   password: string;
   namespace: string;

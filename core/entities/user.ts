@@ -1,22 +1,22 @@
 import { pick } from 'ramda';
 import { CORE_NAMESPACE_NAME } from '../constants';
 
-export type User = {
+export type UserEntity = {
   id: string;
   email: string;
   password: string;
   namespace: string;
 };
 
-export type PublicUser = Omit<User, 'password'>;
+export type PublicUser = Omit<UserEntity, 'password'>;
 
-export type UserAuthDTO = Pick<User, 'id' | 'namespace'>;
+export type UserAuthDTO = Pick<UserEntity, 'id' | 'namespace'>;
 
-export function castUserToPublic(user: User): PublicUser {
+export function castUserToPublic(user: UserEntity): PublicUser {
   return pick(['id', 'email', 'namespace'], user);
 }
 
-export function isAdmin(user: Pick<User, 'namespace'>): boolean {
+export function isAdmin(user: Pick<UserEntity, 'namespace'>): boolean {
   return user.namespace === CORE_NAMESPACE_NAME;
 }
 
