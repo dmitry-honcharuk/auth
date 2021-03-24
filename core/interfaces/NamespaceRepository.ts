@@ -1,13 +1,9 @@
-import { Namespace } from '../entities/namespace';
+import { NamespaceEntity } from '../entities/namespace';
 import { EntityAlredyExistsError } from '../errors/EntityAlredyExistsError';
 
 export interface NamespaceRepository {
   addNamespace(
-    options: AddNamespaceOptions,
-  ): Promise<Namespace | EntityAlredyExistsError>;
-  getNamespaces(): Promise<Namespace[]>;
+    fields: Omit<NamespaceEntity, 'id'>,
+  ): Promise<NamespaceEntity | EntityAlredyExistsError>;
+  getNamespaces(): Promise<NamespaceEntity[]>;
 }
-
-type AddNamespaceOptions = {
-  name: string;
-};

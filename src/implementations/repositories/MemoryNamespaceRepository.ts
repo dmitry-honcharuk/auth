@@ -1,12 +1,9 @@
-import { Namespace } from '../../../core/entities/namespace';
+import { NamespaceEntity } from '../../../core/entities/namespace';
 import { EntityAlredyExistsError } from '../../../core/errors/EntityAlredyExistsError';
 import { NamespaceRepository } from '../../../core/interfaces/NamespaceRepository';
 
 export function createMemoryNamespaceRepository(): NamespaceRepository {
-  const namespaces: Namespace[] = [
-    { id: '1', name: 'First' },
-    { id: '2', name: 'Second' },
-  ];
+  const namespaces: NamespaceEntity[] = [];
 
   return {
     getNamespaces: async () => {
@@ -14,16 +11,17 @@ export function createMemoryNamespaceRepository(): NamespaceRepository {
 
       return namespaces;
     },
-    addNamespace: async ({ name }) => {
+    addNamespace: async ({ name, clientId }) => {
       const existing = namespaces.find((n) => n.name === name);
 
       if (existing) {
         return new EntityAlredyExistsError();
       }
 
-      const namespace: Namespace = {
+      const namespace: NamespaceEntity = {
         id: `${namespaces.length + 1}`,
         name,
+        clientId,
       };
 
       namespaces.push(namespace);
@@ -35,7 +33,7 @@ export function createMemoryNamespaceRepository(): NamespaceRepository {
   };
 }
 
-const log = (stuf: Namespace[]) => {
+const log = (stuf: NamespaceEntity[]) => {
   console.log('-   NAMESPACES   -');
   console.log(stuf);
   console.log('-!!!NAMESPACES!!!-');

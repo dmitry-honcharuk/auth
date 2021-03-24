@@ -1,4 +1,5 @@
-export type Namespace = {
+export type NamespaceEntity = {
   id: string;
   name: string;
+  clientId: string;
 };

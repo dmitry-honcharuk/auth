@@ -1,6 +1,6 @@
 import { createMemoryNamespaceRepository } from '../implementations/repositories/MemoryNamespaceRepository';
-import { buildMemoryUserRepository } from '../implementations/repositories/MemoryUserRepository';
+import { buildMongoUserRepository } from '../implementations/repositories/MongoUserRepository';
 
-export const userRepository = buildMemoryUserRepository();
+export const userRepository = buildMongoUserRepository();
 
 export const namespaceRepository = createMemoryNamespaceRepository();

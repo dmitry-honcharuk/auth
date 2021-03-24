@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
-import { createAddNamespaceUseCase } from '../../../core/use-cases/add-namespace';
-import { createListNamespacesUseCase } from '../../../core/use-cases/list-namespaces';
+import { createAddNamespaceUseCase } from '../../../core/use-cases/app/add-namespace';
+import { createListNamespacesUseCase } from '../../../core/use-cases/app/list-namespaces';
 import { isCoreError } from '../../../core/utils';
 import { namespaceRepository } from '../../dependencies/repositories';
-import { protectedRoute } from './_middlewares/protectedRoute';
+import { protectedRoute } from '../../middlewares/protectedRoute';
 
 export default nc<NextApiRequest, NextApiResponse>()
   .use(protectedRoute)
