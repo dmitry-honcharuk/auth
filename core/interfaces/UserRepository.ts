@@ -1,7 +1,7 @@
 import { UserEntity } from '../entities/user';
 
 export interface UserRepository {
-  isEmailTaken(email: string): Promise<boolean>;
+  isEmailTakenInNamespace(clientId: string, email: string): Promise<boolean>;
   saveUser(options: SaveUserInput): Promise<UserEntity>;
   getUserByEmail(email: string): Promise<null | UserEntity>;
   getUserInNamespaceByEmail(

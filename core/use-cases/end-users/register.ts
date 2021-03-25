@@ -1,13 +1,15 @@
 import { userToAuthDTO } from '../../entities/user';
+import { CoreError } from '../../errors/CoreError';
 import { ValidationError } from '../../errors/ValidationError';
 import { generateSecret } from '../../hasher';
+import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
 import { UserRepository } from '../../interfaces/UserRepository';
 import { getToken } from '../../utils/jwt';
 import { validateEmail, validatePassword } from '../../validation';
 
 export function buildRegisterUseCase(deps: Dependencies) {
-  const { userRepository, passwordManager } = deps;
+  const { userRepository, passwordManager, namespaceRepository } = deps;
 
   return async ({ email, password, clientId }: Input): Promise<string> => {
     if (!clientId) {
@@ -32,10 +34,20 @@ export function buildRegisterUseCase(deps: Dependencies) {
       throw passwordError;
     }
 
-    const emailTaken = await userRepository.isEmailTaken(email);
+    const namespace = await namespaceRepository.getNamespaceByClientId(
+      clientId,
+    );
+
+    if (!namespace) {
+      throw new CoreError(`No namespace for client id. (${clientId})`);
+    }
+
+    const emailTaken = await userRepository.isEmailTakenInNamespace(
+      namespace.id,
+      email,
+    );
 
     if (emailTaken) {
-      // @TODO Redo flow as this message is bad for security reasons
       throw new ValidationError('Email is taken');
     }
 
@@ -44,8 +56,7 @@ export function buildRegisterUseCase(deps: Dependencies) {
     const user = await userRepository.saveUser({
       email,
       password: hashedPassword,
-      // @TODO fix namespace
-      namespace: clientId,
+      namespace: namespace.id,
     });
 
     const token = await getToken(userToAuthDTO(user), generateSecret());
@@ -56,6 +67,7 @@ export function buildRegisterUseCase(deps: Dependencies) {
 
 type Dependencies = {
   userRepository: UserRepository;
+  namespaceRepository: NamespaceRepository;
   passwordManager: PasswordManager;
 };
 interface Input {

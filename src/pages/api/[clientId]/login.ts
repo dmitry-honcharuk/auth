@@ -3,7 +3,10 @@ import { buildLoginUseCase } from '../../../../core/use-cases/end-users/login';
 import { createRoute } from '../../../backend/utils/createRoute';
 import { normalizeQueryParam } from '../../../backend/utils/normalizeQueryParam';
 import { passwordManager } from '../../../dependencies/passwordManager';
-import { userRepository } from '../../../dependencies/repositories';
+import {
+  namespaceRepository,
+  userRepository,
+} from '../../../dependencies/repositories';
 
 export default createRoute().post(loginUser);
 
@@ -18,6 +21,7 @@ async function loginUser(req: NextApiRequest, res: NextApiResponse) {
   const loginEndUser = buildLoginUseCase({
     userRepository,
     passwordManager,
+    namespaceRepository,
   });
 
   const token = await loginEndUser({ email, password, clientId });

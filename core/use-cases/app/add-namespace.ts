@@ -1,7 +1,7 @@
 import { NamespaceEntity } from '../../entities/namespace';
 import { isAdmin, UserAuthDTO } from '../../entities/user';
+import { ClientIdNotUniqueError } from '../../errors/ClientIdNotUniqueError';
 import { CoreError } from '../../errors/CoreError';
-import { EntityAlredyExistsError } from '../../errors/EntityAlredyExistsError';
 import { ForbiddenError } from '../../errors/ForbiddenError';
 import { generateSecret } from '../../hasher';
 import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
@@ -18,11 +18,17 @@ export function createAddNamespaceUseCase({ namespaceRepository }: Deps) {
 
     const clientId = generateSecret();
 
-    const response = await namespaceRepository.addNamespace({ name, clientId });
+    let response;
 
-    if (response instanceof EntityAlredyExistsError) {
-      return new CoreError(`Namespace already exists. (${name})`);
-    }
+    do {
+      try {
+        response = await namespaceRepository.addNamespace({ name, clientId });
+      } catch (error) {
+        if (!(error instanceof ClientIdNotUniqueError)) {
+          return new CoreError('Could not create namespace.');
+        }
+      }
+    } while (!response);
 
     return response;
   };

@@ -3,7 +3,10 @@ import { buildRegisterUseCase } from '../../../../core/use-cases/end-users/regis
 import { createRoute } from '../../../backend/utils/createRoute';
 import { normalizeQueryParam } from '../../../backend/utils/normalizeQueryParam';
 import { passwordManager } from '../../../dependencies/passwordManager';
-import { userRepository } from '../../../dependencies/repositories';
+import {
+  namespaceRepository,
+  userRepository,
+} from '../../../dependencies/repositories';
 
 export default createRoute().post(registerUser);
 
@@ -18,6 +21,7 @@ async function registerUser(req: NextApiRequest, res: NextApiResponse) {
   const registerEndUser = buildRegisterUseCase({
     userRepository,
     passwordManager,
+    namespaceRepository,
   });
 
   const token = await registerEndUser({ email, password, clientId });
