@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Namespace } from '../../core/entities/namespace';
+import { NamespaceEntity } from '../../core/entities/namespace';
 
 export function useNamespaces() {
   const [{ fetched, namespaces }, setState] = useState<{
     fetched: boolean;
-    namespaces: Namespace[];
+    namespaces: NamespaceEntity[];
   }>({ fetched: false, namespaces: [] });
 
   useEffect(() => {

@@ -26,7 +26,15 @@ export async function getDatabase(): Promise<Db> {
     cached.promise = MongoClient.connect(CONNECTION_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    }).then((client) => client.db(MONGO_DB_NAME));
+    })
+      .then((client) => client.db(MONGO_DB_NAME))
+      .then(async (db) => {
+        await db
+          .collection('namespaces')
+          .createIndex({ clientId: 1 }, { unique: true });
+
+        return db;
+      });
   }
 
   cached.db = await cached.promise;

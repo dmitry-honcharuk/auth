@@ -10,7 +10,7 @@ type UserSchema = Omit<UserEntity, 'id'>;
 
 export function buildMongoUserRepository(): UserRepository {
   return {
-    isEmailTaken,
+    isEmailTakenInNamespace,
     saveUser,
     getUserByEmail,
     getUserInNamespaceByEmail,
@@ -21,10 +21,10 @@ async function getUsersCollection() {
   return (await getDatabase()).collection<WithId<UserSchema>>('users');
 }
 
-async function isEmailTaken(email: string) {
+async function isEmailTakenInNamespace(namespaceId: string, email: string) {
   const users = await getUsersCollection();
 
-  const user = await users.findOne({ email });
+  const user = await users.findOne({ namespace: namespaceId, email });
 
   return !!user;
 }
@@ -42,7 +42,7 @@ async function saveUser({
     namespace,
   };
 
-  const entry = await users.insertOne(user);
+  const entry = await users.insertOne({ ...user });
 
   return {
     id: entry.insertedId.toHexString(),

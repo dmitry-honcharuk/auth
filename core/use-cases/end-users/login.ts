@@ -1,14 +1,16 @@
 import { userToAuthDTO } from '../../entities/user';
+import { CoreError } from '../../errors/CoreError';
 import { NoSuchUserError } from '../../errors/NoSuchUserError';
 import { ValidationError } from '../../errors/ValidationError';
 import { WrongPasswordError } from '../../errors/WrongPasswordError';
 import { generateSecret } from '../../hasher';
+import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
 import { UserRepository } from '../../interfaces/UserRepository';
 import { getToken } from '../../utils/jwt';
 
 export function buildLoginUseCase(deps: Dependencies) {
-  const { userRepository, passwordManager } = deps;
+  const { userRepository, passwordManager, namespaceRepository } = deps;
 
   return async ({ email, password, clientId }: Input): Promise<string> => {
     if (!clientId) {
@@ -23,8 +25,16 @@ export function buildLoginUseCase(deps: Dependencies) {
       throw new ValidationError('Password is required');
     }
 
-    const user = await userRepository.getUserInNamespaceByEmail(
+    const namespace = await namespaceRepository.getNamespaceByClientId(
       clientId,
+    );
+
+    if (!namespace) {
+      throw new CoreError(`No namespace for client id. (${clientId})`);
+    }
+
+    const user = await userRepository.getUserInNamespaceByEmail(
+      namespace.id,
       email,
     );
 
@@ -38,7 +48,6 @@ export function buildLoginUseCase(deps: Dependencies) {
 
     const secret = generateSecret();
 
-    // @TODO add expiration + refresh?
     const token = await getToken(userToAuthDTO(user), secret);
 
     return token;
@@ -46,8 +55,9 @@ export function buildLoginUseCase(deps: Dependencies) {
 }
 
 type Dependencies = {
-  userRepository: UserRepository;
   passwordManager: PasswordManager;
+  userRepository: UserRepository;
+  namespaceRepository: NamespaceRepository;
 };
 interface Input {
   email?: string;

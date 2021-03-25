@@ -1,3 +1,5 @@
 import { randomBytes } from 'crypto';
 
-export const generateSecret = () => randomBytes(264).toString('base64');
+export const generateSecret = () => {
+  return randomBytes(32).toString('hex');
+};
