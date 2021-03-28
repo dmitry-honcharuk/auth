@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NamespaceEntity } from '../../core/entities/namespace';
+import { get } from '../services/api';
 
 export function useNamespaces() {
   const [{ fetched, namespaces }, setState] = useState<{
@@ -9,9 +10,9 @@ export function useNamespaces() {
 
   useEffect(() => {
     if (!fetched) {
-      fetch('/api/namespaces')
-        .then((r) => r.json())
-        .then((ns) => setState({ fetched: true, namespaces: ns }));
+      get('/api/namespaces').then((ns) =>
+        setState({ fetched: true, namespaces: ns }),
+      );
     }
   }, [fetched, setState]);
 

@@ -14,6 +14,7 @@ export function buildMongoUserRepository(): UserRepository {
     saveUser,
     getUserByEmail,
     getUserInNamespaceByEmail,
+    getUsersInNamespace,
   };
 }
 
@@ -81,4 +82,16 @@ async function getUserInNamespaceByEmail(
     id: entry._id.toHexString(),
     ...user,
   };
+}
+
+async function getUsersInNamespace(namespaceId: string): Promise<UserEntity[]> {
+  const users = await getUsersCollection();
+
+  return users
+    .find({ namespace: namespaceId })
+    .map(({ _id, ...user }) => ({
+      id: _id.toHexString(),
+      ...user,
+    }))
+    .toArray();
 }

@@ -8,6 +8,7 @@ export interface UserRepository {
     namespace: string,
     email: string,
   ): Promise<null | UserEntity>;
+  getUsersInNamespace(namespaceId: string): Promise<UserEntity[]>;
 }
 
 export type SaveUserInput = {
