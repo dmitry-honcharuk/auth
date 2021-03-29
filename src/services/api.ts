@@ -1,4 +1,7 @@
-export async function post<B extends object>(url: string, body: B) {
+export async function post<B extends Record<string, unknown>>(
+  url: string,
+  body: B,
+) {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -19,7 +22,7 @@ export async function post<B extends object>(url: string, body: B) {
   return data;
 }
 
-export async function get(url: string) {
+export async function get<T = any>(url: string): Promise<T> {
   const response = await fetch(url);
 
   const data = await response.json();
