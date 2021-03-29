@@ -1,5 +1,5 @@
+import { isAdmin, UserAuthDTO } from '../../entities/end-user';
 import { NamespaceEntity } from '../../entities/namespace';
-import { isAdmin, UserAuthDTO } from '../../entities/user';
 import { ClientIdNotUniqueError } from '../../errors/ClientIdNotUniqueError';
 import { CoreError } from '../../errors/CoreError';
 import { ForbiddenError } from '../../errors/ForbiddenError';

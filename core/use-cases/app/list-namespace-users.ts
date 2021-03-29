@@ -3,10 +3,10 @@ import {
   isAdmin,
   PublicUser,
   UserAuthDTO,
-} from '../../entities/user';
+} from '../../entities/end-user';
 import { CoreError } from '../../errors/CoreError';
 import { ForbiddenError } from '../../errors/ForbiddenError';
-import { UserRepository } from '../../interfaces/UserRepository';
+import { EndUserRepository } from '../../interfaces/EndUserRepository';
 
 export function listNamespaceUsersFactory({ userRepository }: Dependencies) {
   return async ({ currentUser, namespaceId }: Input): Promise<PublicUser[]> => {
@@ -25,7 +25,7 @@ export function listNamespaceUsersFactory({ userRepository }: Dependencies) {
 }
 
 type Dependencies = {
-  userRepository: UserRepository;
+  userRepository: EndUserRepository;
 };
 type Input = {
   currentUser: UserAuthDTO;

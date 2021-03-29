@@ -1,6 +1,6 @@
 import { createContext } from 'react';
+import { PublicUser } from '../../../../core/entities/end-user';
 import { NamespaceEntity } from '../../../../core/entities/namespace';
-import { PublicUser } from '../../../../core/entities/user';
 
 type Context = {
   selectedNamespace: null | NamespaceEntity;

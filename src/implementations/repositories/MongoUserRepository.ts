@@ -1,14 +1,14 @@
 import { WithId } from 'mongodb';
-import { UserEntity } from '../../../core/entities/user';
+import { EndUserEntity } from '../../../core/entities/end-user';
 import {
+  EndUserRepository,
   SaveUserInput,
-  UserRepository,
-} from '../../../core/interfaces/UserRepository';
+} from '../../../core/interfaces/EndUserRepository';
 import { getDatabase } from './mongo/mongo.client';
 
-type UserSchema = Omit<UserEntity, 'id'>;
+type UserSchema = Omit<EndUserEntity, 'id'>;
 
-export function buildMongoUserRepository(): UserRepository {
+export function buildMongoUserRepository(): EndUserRepository {
   return {
     isEmailTakenInNamespace,
     saveUser,
@@ -34,7 +34,7 @@ async function saveUser({
   email,
   password,
   namespace,
-}: SaveUserInput): Promise<UserEntity> {
+}: SaveUserInput): Promise<EndUserEntity> {
   const users = await getUsersCollection();
 
   const user = {
@@ -51,7 +51,7 @@ async function saveUser({
   };
 }
 
-async function getUserByEmail(email: string): Promise<UserEntity | null> {
+async function getUserByEmail(email: string): Promise<EndUserEntity | null> {
   const users = await getUsersCollection();
 
   const entry = await users.findOne({ email });
@@ -61,7 +61,7 @@ async function getUserByEmail(email: string): Promise<UserEntity | null> {
   const { _id, ...user } = entry;
 
   return {
-    id: entry._id.toHexString(),
+    id: _id.toHexString(),
     ...user,
   };
 }
@@ -69,7 +69,7 @@ async function getUserByEmail(email: string): Promise<UserEntity | null> {
 async function getUserInNamespaceByEmail(
   namespace: string,
   email: string,
-): Promise<UserEntity | null> {
+): Promise<EndUserEntity | null> {
   const users = await getUsersCollection();
 
   const entry = await users.findOne({ email, namespace });
@@ -79,12 +79,14 @@ async function getUserInNamespaceByEmail(
   const { _id, ...user } = entry;
 
   return {
-    id: entry._id.toHexString(),
+    id: _id.toHexString(),
     ...user,
   };
 }
 
-async function getUsersInNamespace(namespaceId: string): Promise<UserEntity[]> {
+async function getUsersInNamespace(
+  namespaceId: string,
+): Promise<EndUserEntity[]> {
   const users = await getUsersCollection();
 
   return users

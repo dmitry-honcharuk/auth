@@ -1,10 +1,10 @@
-import { userToAuthDTO } from '../../entities/user';
+import { userToAuthDTO } from '../../entities/end-user';
 import { CoreError } from '../../errors/CoreError';
 import { ValidationError } from '../../errors/ValidationError';
 import { generateSecret } from '../../hasher';
+import { EndUserRepository } from '../../interfaces/EndUserRepository';
 import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
-import { UserRepository } from '../../interfaces/UserRepository';
 import { getToken } from '../../utils/jwt';
 import { validateEmail, validatePassword } from '../../validation';
 
@@ -59,14 +59,12 @@ export function buildRegisterUseCase(deps: Dependencies) {
       namespace: namespace.id,
     });
 
-    const token = await getToken(userToAuthDTO(user), generateSecret());
-
-    return token;
+    return getToken(userToAuthDTO(user), generateSecret());
   };
 }
 
 type Dependencies = {
-  userRepository: UserRepository;
+  userRepository: EndUserRepository;
   namespaceRepository: NamespaceRepository;
   passwordManager: PasswordManager;
 };

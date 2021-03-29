@@ -1,4 +1,4 @@
-import { PublicUser } from '../../core/entities/user';
+import { PublicUser } from '../../core/entities/end-user';
 import { get } from './api';
 
 export function getUsersInNamespace(namespaceId: string) {

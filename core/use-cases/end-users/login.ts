@@ -1,12 +1,12 @@
-import { userToAuthDTO } from '../../entities/user';
+import { userToAuthDTO } from '../../entities/end-user';
 import { CoreError } from '../../errors/CoreError';
 import { NoSuchUserError } from '../../errors/NoSuchUserError';
 import { ValidationError } from '../../errors/ValidationError';
 import { WrongPasswordError } from '../../errors/WrongPasswordError';
 import { generateSecret } from '../../hasher';
+import { EndUserRepository } from '../../interfaces/EndUserRepository';
 import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
-import { UserRepository } from '../../interfaces/UserRepository';
 import { getToken } from '../../utils/jwt';
 
 export function buildLoginUseCase(deps: Dependencies) {
@@ -48,15 +48,13 @@ export function buildLoginUseCase(deps: Dependencies) {
 
     const secret = generateSecret();
 
-    const token = await getToken(userToAuthDTO(user), secret);
-
-    return token;
+    return getToken(userToAuthDTO(user), secret);
   };
 }
 
 type Dependencies = {
   passwordManager: PasswordManager;
-  userRepository: UserRepository;
+  userRepository: EndUserRepository;
   namespaceRepository: NamespaceRepository;
 };
 interface Input {

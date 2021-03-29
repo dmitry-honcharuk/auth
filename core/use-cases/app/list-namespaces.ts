@@ -1,5 +1,5 @@
+import { isAdmin, UserAuthDTO } from '../../entities/end-user';
 import { NamespaceEntity } from '../../entities/namespace';
-import { isAdmin, UserAuthDTO } from '../../entities/user';
 import { CoreError } from '../../errors/CoreError';
 import { ForbiddenError } from '../../errors/ForbiddenError';
 import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
@@ -10,9 +10,7 @@ export function createListNamespacesUseCase({ namespaceRepository }: Deps) {
       return new ForbiddenError();
     }
 
-    const namespaces = await namespaceRepository.getNamespaces();
-
-    return namespaces;
+    return namespaceRepository.getNamespaces();
   };
 }
 

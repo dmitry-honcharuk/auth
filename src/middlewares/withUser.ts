@@ -2,7 +2,7 @@ import Cookies from 'cookies';
 import { verify } from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Middleware } from 'next-connect';
-import { UserAuthDTO } from '../../core/entities/user';
+import { UserAuthDTO } from '../../core/entities/end-user';
 import { JWT_COOKIE_NAME, JWT_SECRET } from '../config/env';
 
 export const withUser: Middleware<NextApiRequest, NextApiResponse> = (

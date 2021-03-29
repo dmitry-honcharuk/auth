@@ -1,7 +1,7 @@
-import { UserDTO } from '../../../core/entities/user';
+import { UserDTO } from '../../../core/entities/end-user';
 
 declare module 'next' {
-  export interface NextApiRequest<T = any> {
+  export interface NextApiRequest {
     user: UserDTO | null;
   }
 }

@@ -1,7 +1,7 @@
 import Cookies from 'cookies';
 import { sign as signJwt } from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { userToAuthDTO } from '../../../core/entities/user';
+import { userToAuthDTO } from '../../../core/entities/end-user';
 import { CoreError } from '../../../core/errors/CoreError';
 import { buildLoginUseCase } from '../../../core/use-cases/app/login';
 import { createRoute } from '../../backend/utils/createRoute';

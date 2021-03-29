@@ -1,10 +1,10 @@
-import { castUserToPublic, PublicUser } from '../../entities/user';
+import { castUserToPublic, PublicUser } from '../../entities/end-user';
 import { CoreError } from '../../errors/CoreError';
 import { NoSuchUserError } from '../../errors/NoSuchUserError';
 import { ValidationError } from '../../errors/ValidationError';
 import { WrongPasswordError } from '../../errors/WrongPasswordError';
+import { EndUserRepository } from '../../interfaces/EndUserRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
-import { UserRepository } from '../../interfaces/UserRepository';
 
 export function buildLoginUseCase(deps: Dependencies) {
   const { userRepository, passwordManager } = deps;
@@ -33,7 +33,7 @@ export function buildLoginUseCase(deps: Dependencies) {
 }
 
 type Dependencies = {
-  userRepository: UserRepository;
+  userRepository: EndUserRepository;
   passwordManager: PasswordManager;
 };
 interface Input {
