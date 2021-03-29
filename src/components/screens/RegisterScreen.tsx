@@ -3,14 +3,14 @@ import { useRouter } from 'next/router';
 import { isEmpty } from 'ramda';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { login } from '../../services/auth';
+import { register as registerUser } from '../../services/auth';
 import { AuthContext } from '../AppContext';
 import { Button } from '../common/Button';
 import { Centered } from '../common/Centered';
 
 type FormState = { email: string; password: string };
 
-export function LoginScreen() {
+export function RegisterScreen() {
   const [error, setError] = useState('');
   const { register, handleSubmit, errors } = useForm<FormState>();
   const router = useRouter();
@@ -18,7 +18,7 @@ export function LoginScreen() {
 
   const onSubmit = async (data: FormState) => {
     try {
-      await login(data);
+      await registerUser(data);
       await fetchCurrentUser();
 
       router.push('/admin');
@@ -60,10 +60,10 @@ export function LoginScreen() {
         </div>
 
         <div className='relative flex justify-between mt-3'>
-          <Link href='/admin/sign-up'>
-            <a>I don’t have an account</a>
+          <Link href='/admin/sign-in'>
+            <a>I have an account</a>
           </Link>
-          <Button type='submit'>Sign in</Button>
+          <Button type='submit'>Sign up</Button>
 
           {(error || !isEmpty(errors)) && (
             <div className='absolute -bottom-10 w-full text-center text-xs text-pink-600'>

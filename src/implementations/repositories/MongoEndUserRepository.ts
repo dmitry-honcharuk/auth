@@ -1,14 +1,14 @@
 import { WithId } from 'mongodb';
-import { EndUserEntity } from '../../../core/entities/end-user';
+import { CustomerEntity } from '../../../core/entities/customer';
 import {
-  EndUserRepository,
+  CustomerRepository,
   SaveUserInput,
-} from '../../../core/interfaces/EndUserRepository';
+} from '../../../core/interfaces/CustomerRepository';
 import { getDatabase } from './mongo/mongo.client';
 
-type UserSchema = Omit<EndUserEntity, 'id'>;
+type UserSchema = Omit<CustomerEntity, 'id'>;
 
-export function buildMongoUserRepository(): EndUserRepository {
+export function mongoCustomerRepositoryFactory(): CustomerRepository {
   return {
     isEmailTakenInNamespace,
     saveUser,
@@ -34,7 +34,7 @@ async function saveUser({
   email,
   password,
   namespace,
-}: SaveUserInput): Promise<EndUserEntity> {
+}: SaveUserInput): Promise<CustomerEntity> {
   const users = await getUsersCollection();
 
   const user = {
@@ -51,7 +51,7 @@ async function saveUser({
   };
 }
 
-async function getUserByEmail(email: string): Promise<EndUserEntity | null> {
+async function getUserByEmail(email: string): Promise<CustomerEntity | null> {
   const users = await getUsersCollection();
 
   const entry = await users.findOne({ email });
@@ -69,7 +69,7 @@ async function getUserByEmail(email: string): Promise<EndUserEntity | null> {
 async function getUserInNamespaceByEmail(
   namespace: string,
   email: string,
-): Promise<EndUserEntity | null> {
+): Promise<CustomerEntity | null> {
   const users = await getUsersCollection();
 
   const entry = await users.findOne({ email, namespace });
@@ -86,7 +86,7 @@ async function getUserInNamespaceByEmail(
 
 async function getUsersInNamespace(
   namespaceId: string,
-): Promise<EndUserEntity[]> {
+): Promise<CustomerEntity[]> {
   const users = await getUsersCollection();
 
   return users

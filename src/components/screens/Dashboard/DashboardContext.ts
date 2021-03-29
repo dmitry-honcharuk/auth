@@ -1,11 +1,11 @@
 import { createContext } from 'react';
-import { PublicUser } from '../../../../core/entities/end-user';
+import { PublicCustomer } from '../../../../core/entities/customer';
 import { NamespaceEntity } from '../../../../core/entities/namespace';
 
 type Context = {
   selectedNamespace: null | NamespaceEntity;
   selectNamespace: (namespace: NamespaceEntity) => void;
-  users: PublicUser[];
+  users: PublicCustomer[];
 };
 
 export const DashboardContext = createContext<Context>({

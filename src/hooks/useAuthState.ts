@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getCurrentUser } from '../services/auth';
 
 enum State {
@@ -10,22 +10,23 @@ enum State {
 export function useAuthState() {
   const [state, setState] = useState(State.Pending);
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const { user } = await getCurrentUser();
+  const fetchUser = useCallback(async () => {
+    try {
+      const { user } = await getCurrentUser();
 
-        setState(user ? State.LoggedIn : State.LoggedOut);
-      } catch (e) {
-        setState(State.LoggedOut);
-      }
+      setState(user ? State.LoggedIn : State.LoggedOut);
+    } catch (e) {
+      setState(State.LoggedOut);
     }
-
-    fetchUser();
   }, []);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return {
     isLoggedIn: state === State.LoggedIn,
     isPending: state === State.Pending,
+    fetchUser,
   };
 }

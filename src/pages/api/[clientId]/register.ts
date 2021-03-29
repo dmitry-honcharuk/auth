@@ -1,16 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { buildRegisterUseCase } from '../../../../core/use-cases/end-users/register';
+import { buildRegisterUseCase } from '../../../../core/use-cases/customers/register';
 import { createRoute } from '../../../backend/utils/createRoute';
 import { normalizeQueryParam } from '../../../backend/utils/normalizeQueryParam';
 import { passwordManager } from '../../../dependencies/passwordManager';
 import {
+  customerRepository,
   namespaceRepository,
-  userRepository,
 } from '../../../dependencies/repositories';
 
-export default createRoute().post(registerUser);
+export default createRoute().post(registerCustomer);
 
-async function registerUser(req: NextApiRequest, res: NextApiResponse) {
+async function registerCustomer(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { clientId: clientIdQuery },
     body: { email, password },
@@ -19,7 +19,7 @@ async function registerUser(req: NextApiRequest, res: NextApiResponse) {
   const clientId = normalizeQueryParam(clientIdQuery);
 
   const registerEndUser = buildRegisterUseCase({
-    userRepository,
+    userRepository: customerRepository,
     passwordManager,
     namespaceRepository,
   });

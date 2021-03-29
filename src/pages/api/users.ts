@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createRoute } from '../../backend/utils/createRoute';
-import { userRepository } from '../../dependencies/repositories';
+import { customerRepository } from '../../dependencies/repositories';
 
 export default createRoute().get(getAllUsers);
 
@@ -8,7 +8,7 @@ async function getAllUsers(req: NextApiRequest, res: NextApiResponse) {
   const { query } = req;
 
   try {
-    const users = await userRepository.getUserByEmail('');
+    const users = await customerRepository.getUserByEmail('');
 
     return res.json(query);
   } catch (error) {

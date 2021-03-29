@@ -1,19 +1,13 @@
-import {
-  castUserToPublic,
-  isAdmin,
-  PublicUser,
-  UserAuthDTO,
-} from '../../entities/end-user';
+import { castUserToPublic, PublicCustomer } from '../../entities/customer';
+import { UserAuthDTO } from '../../entities/user';
 import { CoreError } from '../../errors/CoreError';
-import { ForbiddenError } from '../../errors/ForbiddenError';
-import { EndUserRepository } from '../../interfaces/EndUserRepository';
+import { CustomerRepository } from '../../interfaces/CustomerRepository';
 
 export function listNamespaceUsersFactory({ userRepository }: Dependencies) {
-  return async ({ currentUser, namespaceId }: Input): Promise<PublicUser[]> => {
-    if (!isAdmin(currentUser)) {
-      throw new ForbiddenError();
-    }
-
+  return async ({
+    currentUser,
+    namespaceId,
+  }: Input): Promise<PublicCustomer[]> => {
     if (!namespaceId) {
       throw new CoreError('Namespace id is required');
     }
@@ -25,7 +19,7 @@ export function listNamespaceUsersFactory({ userRepository }: Dependencies) {
 }
 
 type Dependencies = {
-  userRepository: EndUserRepository;
+  userRepository: CustomerRepository;
 };
 type Input = {
   currentUser: UserAuthDTO;

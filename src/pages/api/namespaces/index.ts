@@ -1,5 +1,5 @@
-import { createAddNamespaceUseCase } from '../../../../core/use-cases/app/add-namespace';
-import { createListNamespacesUseCase } from '../../../../core/use-cases/app/list-namespaces';
+import { createAddNamespaceUseCase } from '../../../../core/use-cases/users/add-namespace';
+import { createListNamespacesUseCase } from '../../../../core/use-cases/users/list-namespaces';
 import { isCoreError } from '../../../../core/utils';
 import { createRoute } from '../../../backend/utils/createRoute';
 import { namespaceRepository } from '../../../dependencies/repositories';

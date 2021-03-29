@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from 'react';
-import { PublicUser } from '../../../../core/entities/end-user';
+import { PublicCustomer } from '../../../../core/entities/customer';
 import { NamespaceEntity } from '../../../../core/entities/namespace';
 import { getUsersInNamespace } from '../../../services/users';
 import { DashboardContext } from './DashboardContext';
@@ -9,7 +9,7 @@ export const DashboardScreen: FunctionComponent = ({ children }) => {
   const [selectedNamespace, selectNamespace] = useState<NamespaceEntity | null>(
     null,
   );
-  const [users, setUsers] = useState<PublicUser[]>([]);
+  const [users, setUsers] = useState<PublicCustomer[]>([]);
 
   useEffect(() => {
     if (selectedNamespace) {

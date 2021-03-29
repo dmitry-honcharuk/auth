@@ -1,15 +1,14 @@
-import { userToAuthDTO } from '../../entities/end-user';
+import { customerToAuthDTO } from '../../entities/customer';
 import { CoreError } from '../../errors/CoreError';
-import { NoSuchUserError } from '../../errors/NoSuchUserError';
 import { ValidationError } from '../../errors/ValidationError';
-import { WrongPasswordError } from '../../errors/WrongPasswordError';
 import { generateSecret } from '../../hasher';
-import { EndUserRepository } from '../../interfaces/EndUserRepository';
+import { CustomerRepository } from '../../interfaces/CustomerRepository';
 import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
 import { getToken } from '../../utils/jwt';
+import { validateEmail, validatePassword } from '../../validation';
 
-export function buildLoginUseCase(deps: Dependencies) {
+export function buildRegisterUseCase(deps: Dependencies) {
   const { userRepository, passwordManager, namespaceRepository } = deps;
 
   return async ({ email, password, clientId }: Input): Promise<string> => {
@@ -25,6 +24,16 @@ export function buildLoginUseCase(deps: Dependencies) {
       throw new ValidationError('Password is required');
     }
 
+    const emailError = validateEmail(email);
+    if (emailError) {
+      throw emailError;
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      throw passwordError;
+    }
+
     const namespace = await namespaceRepository.getNamespaceByClientId(
       clientId,
     );
@@ -33,29 +42,31 @@ export function buildLoginUseCase(deps: Dependencies) {
       throw new CoreError(`No namespace for client id. (${clientId})`);
     }
 
-    const user = await userRepository.getUserInNamespaceByEmail(
+    const emailTaken = await userRepository.isEmailTakenInNamespace(
       namespace.id,
       email,
     );
 
-    if (!user) {
-      throw new NoSuchUserError(email, clientId);
+    if (emailTaken) {
+      throw new ValidationError('Email is taken');
     }
 
-    if (!passwordManager.isPasswordValid(password, user.password)) {
-      throw new WrongPasswordError();
-    }
+    const hashedPassword = passwordManager.hashPassword(password);
 
-    const secret = generateSecret();
+    const user = await userRepository.saveUser({
+      email,
+      password: hashedPassword,
+      namespace: namespace.id,
+    });
 
-    return getToken(userToAuthDTO(user), secret);
+    return getToken(customerToAuthDTO(user), generateSecret());
   };
 }
 
 type Dependencies = {
-  passwordManager: PasswordManager;
-  userRepository: EndUserRepository;
+  userRepository: CustomerRepository;
   namespaceRepository: NamespaceRepository;
+  passwordManager: PasswordManager;
 };
 interface Input {
   email?: string;

@@ -4,6 +4,10 @@ export function login(creds: Creds) {
   return post('/api/login', creds);
 }
 
+export function register(creds: Creds) {
+  return post('/api/register', creds);
+}
+
 export function logout() {
   return post('/api/logout', {});
 }

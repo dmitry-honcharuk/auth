@@ -1,14 +1,15 @@
-import { userToAuthDTO } from '../../entities/end-user';
+import { customerToAuthDTO } from '../../entities/customer';
 import { CoreError } from '../../errors/CoreError';
+import { NoSuchUserError } from '../../errors/NoSuchUserError';
 import { ValidationError } from '../../errors/ValidationError';
+import { WrongPasswordError } from '../../errors/WrongPasswordError';
 import { generateSecret } from '../../hasher';
-import { EndUserRepository } from '../../interfaces/EndUserRepository';
+import { CustomerRepository } from '../../interfaces/CustomerRepository';
 import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
 import { getToken } from '../../utils/jwt';
-import { validateEmail, validatePassword } from '../../validation';
 
-export function buildRegisterUseCase(deps: Dependencies) {
+export function buildLoginUseCase(deps: Dependencies) {
   const { userRepository, passwordManager, namespaceRepository } = deps;
 
   return async ({ email, password, clientId }: Input): Promise<string> => {
@@ -24,16 +25,6 @@ export function buildRegisterUseCase(deps: Dependencies) {
       throw new ValidationError('Password is required');
     }
 
-    const emailError = validateEmail(email);
-    if (emailError) {
-      throw emailError;
-    }
-
-    const passwordError = validatePassword(password);
-    if (passwordError) {
-      throw passwordError;
-    }
-
     const namespace = await namespaceRepository.getNamespaceByClientId(
       clientId,
     );
@@ -42,31 +33,29 @@ export function buildRegisterUseCase(deps: Dependencies) {
       throw new CoreError(`No namespace for client id. (${clientId})`);
     }
 
-    const emailTaken = await userRepository.isEmailTakenInNamespace(
+    const user = await userRepository.getUserInNamespaceByEmail(
       namespace.id,
       email,
     );
 
-    if (emailTaken) {
-      throw new ValidationError('Email is taken');
+    if (!user) {
+      throw new NoSuchUserError(email, clientId);
     }
 
-    const hashedPassword = passwordManager.hashPassword(password);
+    if (!passwordManager.isPasswordValid(password, user.password)) {
+      throw new WrongPasswordError();
+    }
 
-    const user = await userRepository.saveUser({
-      email,
-      password: hashedPassword,
-      namespace: namespace.id,
-    });
+    const secret = generateSecret();
 
-    return getToken(userToAuthDTO(user), generateSecret());
+    return getToken(customerToAuthDTO(user), secret);
   };
 }
 
 type Dependencies = {
-  userRepository: EndUserRepository;
-  namespaceRepository: NamespaceRepository;
   passwordManager: PasswordManager;
+  userRepository: CustomerRepository;
+  namespaceRepository: NamespaceRepository;
 };
 interface Input {
   email?: string;
