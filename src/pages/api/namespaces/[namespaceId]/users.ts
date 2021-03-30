@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { listNamespaceUsersFactory } from '../../../../../core/use-cases/users/list-namespace-users';
+import { listNamespaceCustomersFactory } from '../../../../../core/use-cases/users/list-namespace-customers';
 import { createRoute } from '../../../../backend/utils/createRoute';
 import { normalizeQueryParam } from '../../../../backend/utils/normalizeQueryParam';
 import { customerRepository } from '../../../../dependencies/repositories';
@@ -20,8 +20,8 @@ async function getUsers(req: NextApiRequest, res: NextApiResponse) {
 
   const namespaceId = normalizeQueryParam(namespaceIdQuery);
 
-  const getUsers = listNamespaceUsersFactory({
-    userRepository: customerRepository,
+  const getUsers = listNamespaceCustomersFactory({
+    customerRepository: customerRepository,
   });
 
   res.status(200).json(await getUsers({ currentUser: user, namespaceId }));

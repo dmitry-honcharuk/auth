@@ -1,4 +1,4 @@
-import { WithId } from 'mongodb';
+import { ObjectId, WithId } from 'mongodb';
 import { NamespaceEntity } from '../../../core/entities/namespace';
 import { ClientIdNotUniqueError } from '../../../core/errors/ClientIdNotUniqueError';
 import {
@@ -14,6 +14,7 @@ export function buildMongoNamespaceRepository(): NamespaceRepository {
     getNamespaces,
     addNamespace,
     getNamespaceByClientId,
+    getNamespaceById,
   };
 }
 
@@ -57,6 +58,23 @@ async function getNamespaceByClientId(
   const collection = await getCollection();
 
   const entry = await collection.findOne({ clientId });
+
+  if (!entry) return null;
+
+  const { _id, ...namespace } = entry;
+
+  return {
+    id: _id.toHexString(),
+    ...namespace,
+  };
+}
+
+async function getNamespaceById(
+  namespaceId: string,
+): Promise<NamespaceEntity | null> {
+  const collection = await getCollection();
+
+  const entry = await collection.findOne({ _id: new ObjectId(namespaceId) });
 
   if (!entry) return null;
 

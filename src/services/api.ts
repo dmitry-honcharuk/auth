@@ -1,7 +1,7 @@
-export async function post<B extends Record<string, unknown>>(
+export async function post<B extends Record<string, unknown>, T = any>(
   url: string,
   body: B,
-) {
+): Promise<T> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {

@@ -1,32 +1,25 @@
-import { FunctionComponent, useEffect, useState } from 'react';
-import { PublicCustomer } from '../../../../core/entities/customer';
-import { NamespaceEntity } from '../../../../core/entities/namespace';
-import { getUsersInNamespace } from '../../../services/users';
-import { DashboardContext } from './DashboardContext';
-import { Header } from './Header';
+import Link from 'next/link';
+import { FC } from 'react';
+import { useLogout } from '../../../hooks/useLogout';
+import { Button } from '../../common/Button';
 
-export const DashboardScreen: FunctionComponent = ({ children }) => {
-  const [selectedNamespace, selectNamespace] = useState<NamespaceEntity | null>(
-    null,
-  );
-  const [users, setUsers] = useState<PublicCustomer[]>([]);
+type Props = {
+  header?: React.ReactNode;
+};
 
-  useEffect(() => {
-    if (selectedNamespace) {
-      getUsersInNamespace(selectedNamespace.id).then(setUsers);
-    }
-  }, [selectedNamespace]);
+export const DashboardScreen: FC<Props> = ({ header, children }) => {
+  const logout = useLogout();
 
   return (
-    <DashboardContext.Provider
-      value={{
-        selectedNamespace: selectedNamespace,
-        selectNamespace,
-        users,
-      }}
-    >
-      <Header />
+    <>
+      <header className='flex items-center px-4 py-2 border-b-2 border-gray-700'>
+        <Link href='/admin'>
+          <a className='text-2xl tracking-wider font-thin'>AUTH</a>
+        </Link>
+        <main className='flex-grow mx-2'>{header}</main>
+        <Button onClick={logout}>Logout</Button>
+      </header>
       <main>{children}</main>
-    </DashboardContext.Provider>
+    </>
   );
 };

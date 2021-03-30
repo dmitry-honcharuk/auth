@@ -1,27 +1,29 @@
 import { castUserToPublic, PublicCustomer } from '../../entities/customer';
-import { UserAuthDTO } from '../../entities/user';
+// import { UserAuthDTO } from '../../entities/user';
 import { CoreError } from '../../errors/CoreError';
 import { CustomerRepository } from '../../interfaces/CustomerRepository';
 
-export function listNamespaceUsersFactory({ userRepository }: Dependencies) {
+export function listNamespaceCustomersFactory({
+  customerRepository,
+}: Dependencies) {
   return async ({
-    currentUser,
+    // currentUser,
     namespaceId,
   }: Input): Promise<PublicCustomer[]> => {
     if (!namespaceId) {
       throw new CoreError('Namespace id is required');
     }
 
-    const users = await userRepository.getUsersInNamespace(namespaceId);
+    const users = await customerRepository.getUsersInNamespace(namespaceId);
 
     return users.map(castUserToPublic);
   };
 }
 
 type Dependencies = {
-  userRepository: CustomerRepository;
+  customerRepository: CustomerRepository;
 };
 type Input = {
-  currentUser: UserAuthDTO;
+  // currentUser: UserAuthDTO;
   namespaceId?: string;
 };

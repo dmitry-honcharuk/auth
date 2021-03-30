@@ -1,30 +1,39 @@
 import cn from 'classnames';
-import { FunctionComponent, useContext, useState } from 'react';
-import { DashboardContext } from './DashboardContext';
+import { useRouter } from 'next/router';
+import { FC } from 'react';
+import { PublicCustomer } from '../../../../core/entities/customer';
+import { NamespaceEntity } from '../../../../core/entities/namespace';
 
 enum Tab {
-  Users,
-  Settings,
+  Customers = 'customers',
+  Settings = 'settings',
 }
 
-export const DashboardContent: FunctionComponent = () => {
-  const { users, selectedNamespace } = useContext(DashboardContext);
-  const [tab, setTab] = useState(Tab.Users);
+type Props = {
+  customers: PublicCustomer[];
+  namespace: NamespaceEntity;
+};
 
-  if (!selectedNamespace) {
-    return <p className={classes.main}>Please select namespace</p>;
-  }
+export const DashboardContent: FC<Props> = ({ namespace, customers }) => {
+  const {
+    push,
+    query: { namespaceId, tab = Tab.Customers },
+  } = useRouter();
+
+  const setTab = async (tab: Tab) => {
+    await push(`/admin/namespace/${namespaceId}?tab=${tab}`);
+  };
 
   return (
     <div className={classes.root}>
       <aside className={classes.sidebar}>
         <button
           className={cn(classes.tab, {
-            [classes.activeTab]: tab === Tab.Users,
+            [classes.activeTab]: tab === Tab.Customers,
           })}
-          onClick={() => setTab(Tab.Users)}
+          onClick={() => setTab(Tab.Customers)}
         >
-          Users
+          Customers
         </button>
         <button
           className={cn(classes.tab, {
@@ -36,7 +45,10 @@ export const DashboardContent: FunctionComponent = () => {
         </button>
       </aside>
       <main className={classes.main}>
-        {tab === Tab.Users && (
+        {tab === Tab.Customers && !customers.length && (
+          <span>No customers yet</span>
+        )}
+        {tab === Tab.Customers && !!customers.length && (
           <table>
             <thead>
               <tr>
@@ -44,7 +56,7 @@ export const DashboardContent: FunctionComponent = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map(({ id, email }) => (
+              {customers.map(({ id, email }) => (
                 <tr key={id}>
                   <td>{email}</td>
                 </tr>
@@ -56,9 +68,8 @@ export const DashboardContent: FunctionComponent = () => {
           <>
             <b>Client ID</b>
             <br />
-            <span className={classes.clientId}>
-              {selectedNamespace.clientId}
-            </span>
+            <span className={classes.clientId}>{namespace.clientId}</span>
+            <br />
           </>
         )}
       </main>
@@ -69,7 +80,7 @@ export const DashboardContent: FunctionComponent = () => {
 const classes = {
   root: 'flex',
   sidebar: cn('border-r-2', 'border-gray-700', 'pt-5', 'flex', 'flex-col'),
-  main: 'p-4',
+  main: 'px-4 py-6',
   th: 'text-left',
   tab: cn('p-2', 'text-left', 'focus:outline-none'),
   activeTab: 'bg-gray-200',
