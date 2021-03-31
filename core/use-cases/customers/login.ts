@@ -33,7 +33,7 @@ export function buildLoginUseCase(deps: Dependencies) {
       throw new CoreError(`No namespace for client id. (${clientId})`);
     }
 
-    const user = await userRepository.getUserInNamespaceByEmail(
+    const user = await userRepository.getCustomerInNamespaceByEmail(
       namespace.id,
       email,
     );

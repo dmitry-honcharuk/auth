@@ -19,7 +19,7 @@ async function registerCustomer(req: NextApiRequest, res: NextApiResponse) {
   const clientId = normalizeQueryParam(clientIdQuery);
 
   const registerEndUser = buildRegisterUseCase({
-    userRepository: customerRepository,
+    customerRepository: customerRepository,
     passwordManager,
     namespaceRepository,
   });

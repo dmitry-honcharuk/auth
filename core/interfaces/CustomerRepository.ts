@@ -2,13 +2,14 @@ import { CustomerEntity } from '../entities/customer';
 
 export interface CustomerRepository {
   isEmailTakenInNamespace(clientId: string, email: string): Promise<boolean>;
-  saveUser(options: SaveUserInput): Promise<CustomerEntity>;
-  getUserByEmail(email: string): Promise<null | CustomerEntity>;
-  getUserInNamespaceByEmail(
+  saveCustomer(options: SaveUserInput): Promise<CustomerEntity>;
+  getCustomerByEmail(email: string): Promise<null | CustomerEntity>;
+  getCustomerInNamespaceByEmail(
     namespace: string,
     email: string,
   ): Promise<null | CustomerEntity>;
-  getUsersInNamespace(namespaceId: string): Promise<CustomerEntity[]>;
+  getCustomerInNamespace(namespaceId: string): Promise<CustomerEntity[]>;
+  removeNamespaceCustomers(namespaceId: string): Promise<void>;
 }
 
 export type SaveUserInput = {

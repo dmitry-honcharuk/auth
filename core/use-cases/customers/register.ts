@@ -9,7 +9,7 @@ import { getToken } from '../../utils/jwt';
 import { validateEmail, validatePassword } from '../../validation';
 
 export function buildRegisterUseCase(deps: Dependencies) {
-  const { userRepository, passwordManager, namespaceRepository } = deps;
+  const { customerRepository, passwordManager, namespaceRepository } = deps;
 
   return async ({ email, password, clientId }: Input): Promise<string> => {
     if (!clientId) {
@@ -42,7 +42,7 @@ export function buildRegisterUseCase(deps: Dependencies) {
       throw new CoreError(`No namespace for client id. (${clientId})`);
     }
 
-    const emailTaken = await userRepository.isEmailTakenInNamespace(
+    const emailTaken = await customerRepository.isEmailTakenInNamespace(
       namespace.id,
       email,
     );
@@ -53,7 +53,7 @@ export function buildRegisterUseCase(deps: Dependencies) {
 
     const hashedPassword = passwordManager.hashPassword(password);
 
-    const user = await userRepository.saveUser({
+    const user = await customerRepository.saveCustomer({
       email,
       password: hashedPassword,
       namespace: namespace.id,
@@ -64,7 +64,7 @@ export function buildRegisterUseCase(deps: Dependencies) {
 }
 
 type Dependencies = {
-  userRepository: CustomerRepository;
+  customerRepository: CustomerRepository;
   namespaceRepository: NamespaceRepository;
   passwordManager: PasswordManager;
 };

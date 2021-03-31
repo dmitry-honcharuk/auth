@@ -14,7 +14,7 @@ export function listNamespaceCustomersFactory({
       throw new CoreError('Namespace id is required');
     }
 
-    const users = await customerRepository.getUsersInNamespace(namespaceId);
+    const users = await customerRepository.getCustomerInNamespace(namespaceId);
 
     return users.map(castUserToPublic);
   };

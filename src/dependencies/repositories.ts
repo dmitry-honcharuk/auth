@@ -1,6 +1,6 @@
-import { mongoUserRepositoryFactory } from '../implementations/repositories/MongoAppUserRepository';
-import { mongoCustomerRepositoryFactory } from '../implementations/repositories/MongoEndUserRepository';
+import { mongoCustomerRepositoryFactory } from '../implementations/repositories/MongoCustomerRepository';
 import { buildMongoNamespaceRepository } from '../implementations/repositories/MongoNamespaceRepository';
+import { mongoUserRepositoryFactory } from '../implementations/repositories/MongoUserRepository';
 
 export const customerRepository = mongoCustomerRepositoryFactory();
 export const userRepository = mongoUserRepositoryFactory();

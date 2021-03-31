@@ -9,12 +9,19 @@ import { getDatabase } from './mongo/mongo.client';
 
 type NamespaceSchema = Omit<NamespaceEntity, 'id'>;
 
+async function getCollection() {
+  return (await getDatabase()).collection<WithId<NamespaceSchema>>(
+    'namespaces',
+  );
+}
+
 export function buildMongoNamespaceRepository(): NamespaceRepository {
   return {
     getNamespaces,
     addNamespace,
     getNamespaceByClientId,
     getNamespaceById,
+    removeNamespaceById,
   };
 }
 
@@ -86,8 +93,8 @@ async function getNamespaceById(
   };
 }
 
-async function getCollection() {
-  return (await getDatabase()).collection<WithId<NamespaceSchema>>(
-    'namespaces',
-  );
+async function removeNamespaceById(namespaceId: string): Promise<void> {
+  const collection = await getCollection();
+
+  await collection.deleteOne({ _id: new ObjectId(namespaceId) });
 }

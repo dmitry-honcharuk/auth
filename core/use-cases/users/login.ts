@@ -18,7 +18,7 @@ export function buildLoginUseCase(deps: Dependencies) {
       throw new ValidationError('Password is required');
     }
 
-    const user = await userRepository.getUserByEmail(email);
+    const user = await userRepository.getCustomerByEmail(email);
 
     if (!user) {
       throw new NoSuchUserError(email);

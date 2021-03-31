@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { PublicCustomer } from '../../../../core/entities/customer';
 import { NamespaceEntity } from '../../../../core/entities/namespace';
+import { deleteNamespace } from '../../../services/namespaces';
+import { Button } from '../../common/Button';
 
 enum Tab {
   Customers = 'customers',
@@ -22,6 +24,11 @@ export const DashboardContent: FC<Props> = ({ namespace, customers }) => {
 
   const setTab = async (tab: Tab) => {
     await push(`/admin/namespace/${namespaceId}?tab=${tab}`);
+  };
+
+  const remove = async () => {
+    await deleteNamespace(namespaceId as string);
+    await push(`/admin`);
   };
 
   return (
@@ -69,7 +76,9 @@ export const DashboardContent: FC<Props> = ({ namespace, customers }) => {
             <b>Client ID</b>
             <br />
             <span className={classes.clientId}>{namespace.clientId}</span>
-            <br />
+            <div className='mt-3'>
+              <Button onClick={remove}>Delete</Button>
+            </div>
           </>
         )}
       </main>

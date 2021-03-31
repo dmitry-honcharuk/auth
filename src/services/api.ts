@@ -36,3 +36,20 @@ export async function get<T = any>(url: string): Promise<T> {
 
   return data;
 }
+
+export async function del<T = any>(url: string): Promise<T> {
+  const response = await fetch(url, {
+    method: 'DELETE',
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw {
+      message: response.status < 500 ? data.message : 'Something went wrong',
+      status: response.status,
+    };
+  }
+
+  return data;
+}
