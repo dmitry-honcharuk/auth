@@ -11,7 +11,7 @@ export type PublicCustomer = Omit<CustomerEntity, 'password'>;
 
 export type CustomerAuthDTO = Pick<CustomerEntity, 'id' | 'namespace'>;
 
-export function castUserToPublic(user: CustomerEntity): PublicCustomer {
+export function customerToPublic(user: CustomerEntity): PublicCustomer {
   return pick(['id', 'email', 'namespace'], user);
 }
 

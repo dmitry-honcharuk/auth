@@ -17,10 +17,10 @@ async function getCustomersCollection() {
 export function mongoCustomerRepositoryFactory(): CustomerRepository {
   return {
     isEmailTakenInNamespace,
-    saveCustomer: saveUser,
-    getCustomerByEmail: getUserByEmail,
-    getCustomerInNamespaceByEmail: getUserInNamespaceByEmail,
-    getCustomerInNamespace: getUsersInNamespace,
+    saveCustomer,
+    getCustomerByEmail,
+    getCustomerInNamespaceByEmail,
+    getCustomersInNamespace: getCustomerInNamespace,
     removeNamespaceCustomers,
   };
 }
@@ -36,7 +36,7 @@ async function isEmailTakenInNamespace(namespaceId: string, email: string) {
   return !!customer;
 }
 
-async function saveUser({
+async function saveCustomer({
   email,
   password,
   namespace: namespaceId,
@@ -60,7 +60,9 @@ async function saveUser({
   };
 }
 
-async function getUserByEmail(email: string): Promise<CustomerEntity | null> {
+async function getCustomerByEmail(
+  email: string,
+): Promise<CustomerEntity | null> {
   const customers = await getCustomersCollection();
 
   const entry = await customers.findOne({ email });
@@ -76,7 +78,7 @@ async function getUserByEmail(email: string): Promise<CustomerEntity | null> {
   };
 }
 
-async function getUserInNamespaceByEmail(
+async function getCustomerInNamespaceByEmail(
   namespaceId: string,
   email: string,
 ): Promise<CustomerEntity | null> {
@@ -98,7 +100,7 @@ async function getUserInNamespaceByEmail(
   };
 }
 
-async function getUsersInNamespace(
+async function getCustomerInNamespace(
   namespaceId: string,
 ): Promise<CustomerEntity[]> {
   const customers = await getCustomersCollection();

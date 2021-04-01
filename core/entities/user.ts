@@ -8,7 +8,11 @@ export type UserEntity = {
 
 export type UserAuthDTO = Pick<UserEntity, 'id'>;
 
-export type PublicUser = Omit<UserEntity, 'password'>;
+export type PublicUser = Omit<UserEntity, 'email' | 'password'>;
+
+export function userToPublic(user: UserEntity): PublicUser {
+  return pick(['id'], user);
+}
 
 export function userToAuthDTO(user: UserAuthDTO): UserAuthDTO {
   return pick(['id'], user);

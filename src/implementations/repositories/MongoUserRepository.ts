@@ -12,6 +12,7 @@ export function mongoUserRepositoryFactory(): UserRepository {
   return {
     isEmailTaken,
     saveUser,
+    getUserByEmail,
   };
 }
 
@@ -42,6 +43,21 @@ async function saveUser({
 
   return {
     id: entry.insertedId.toHexString(),
+    ...user,
+  };
+}
+
+async function getUserByEmail(email: string): Promise<UserEntity | null> {
+  const collection = await getUsersCollection();
+
+  const entry = await collection.findOne({ email });
+
+  if (!entry) return null;
+
+  const { _id, ...user } = entry;
+
+  return {
+    id: _id.toHexString(),
     ...user,
   };
 }

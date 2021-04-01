@@ -3,11 +3,14 @@ import { NamespaceEntity } from '../../../core/entities/namespace';
 import { ClientIdNotUniqueError } from '../../../core/errors/ClientIdNotUniqueError';
 import {
   AddNamespaceInput,
+  GetNamespacesOutDTO,
   NamespaceRepository,
 } from '../../../core/interfaces/NamespaceRepository';
 import { getDatabase } from './mongo/mongo.client';
 
-type NamespaceSchema = Omit<NamespaceEntity, 'id'>;
+type NamespaceSchema = Omit<NamespaceEntity, 'id' | 'creator'> & {
+  creator: ObjectId;
+};
 
 async function getCollection() {
   return (await getDatabase()).collection<WithId<NamespaceSchema>>(
@@ -17,7 +20,7 @@ async function getCollection() {
 
 export function buildMongoNamespaceRepository(): NamespaceRepository {
   return {
-    getNamespaces,
+    getUserNamespaces: getNamespaces,
     addNamespace,
     getNamespaceByClientId,
     getNamespaceById,
@@ -25,26 +28,42 @@ export function buildMongoNamespaceRepository(): NamespaceRepository {
   };
 }
 
-async function getNamespaces() {
+async function getNamespaces(
+  creatorId: string,
+): Promise<GetNamespacesOutDTO[]> {
   const collection = await getCollection();
 
-  const entries = collection.find({});
+  const entries = collection.find({
+    creator: new ObjectId(creatorId),
+  });
 
   return entries
-    .map(({ _id, ...namespace }) => ({
-      id: _id.toHexString(),
-      ...namespace,
-    }))
+    .map(
+      (entry): GetNamespacesOutDTO => {
+        const { _id, creator, ...ns } = entry;
+
+        return {
+          id: _id.toHexString(),
+          ...ns,
+        };
+      },
+    )
     .toArray();
 }
 
-async function addNamespace({ name, clientId }: AddNamespaceInput) {
+async function addNamespace(
+  creatorId: string,
+  { clientId, name }: AddNamespaceInput,
+): Promise<NamespaceEntity> {
   const collection = await getCollection();
 
-  const namespace = { name, clientId };
+  const namespace = { name, clientId, creator: creatorId };
 
   try {
-    const entry = await collection.insertOne({ ...namespace });
+    const entry = await collection.insertOne({
+      ...namespace,
+      creator: new ObjectId(creatorId),
+    });
 
     return {
       id: entry.insertedId.toHexString(),
@@ -73,6 +92,7 @@ async function getNamespaceByClientId(
   return {
     id: _id.toHexString(),
     ...namespace,
+    creator: namespace.creator.toHexString(),
   };
 }
 
@@ -90,6 +110,7 @@ async function getNamespaceById(
   return {
     id: _id.toHexString(),
     ...namespace,
+    creator: namespace.creator.toHexString(),
   };
 }
 

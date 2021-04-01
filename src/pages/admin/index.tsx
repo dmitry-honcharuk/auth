@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { NamespaceEntity } from '../../../core/entities/namespace';
 import { createListNamespacesUseCase } from '../../../core/use-cases/users/list-namespaces';
+import { getCurrentUser } from '../../backend/utils/getCurrentUser';
 import { Button } from '../../components/common/Button';
 import { DashboardScreen } from '../../components/screens/Dashboard/DashboardScreen';
 import { namespaceRepository } from '../../dependencies/repositories';
@@ -35,15 +36,26 @@ export default function Dashboard({ namespaces }: Props) {
 }
 
 type Props = {
-  namespaces: NamespaceEntity[];
+  namespaces: Omit<NamespaceEntity, 'creator'>[];
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const namespaces = await createListNamespacesUseCase({
-    namespaceRepository,
-  })();
+export const getServerSideProps: GetServerSideProps<Props> = async ({
+  req,
+  res,
+}) => {
+  try {
+    const user = await getCurrentUser(req, res);
 
-  return {
-    props: { namespaces },
-  };
+    const namespaces = await createListNamespacesUseCase({
+      namespaceRepository,
+    })({
+      currentUserId: user.id,
+    });
+
+    return {
+      props: { namespaces },
+    };
+  } catch (e) {
+    return { notFound: true };
+  }
 };

@@ -5,9 +5,15 @@ import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
 export function removeNamespaceFactory(deps: Dependencies) {
   const { customerRepository, namespaceRepository } = deps;
 
-  return async ({ namespaceId }: Input) => {
+  return async ({ namespaceId, currentUserId }: Input) => {
     if (!namespaceId) {
       throw new ValidationError('Namespace id is required');
+    }
+
+    const namespace = await namespaceRepository.getNamespaceById(namespaceId);
+
+    if (namespace?.creator !== currentUserId) {
+      return;
     }
 
     await Promise.all([
@@ -21,4 +27,4 @@ type Dependencies = {
   customerRepository: CustomerRepository;
   namespaceRepository: NamespaceRepository;
 };
-type Input = { namespaceId?: string };
+type Input = { namespaceId?: string; currentUserId: string };

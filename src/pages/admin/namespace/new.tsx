@@ -1,6 +1,8 @@
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { getCurrentUser } from '../../../backend/utils/getCurrentUser';
 import { Button } from '../../../components/common/Button';
 import { FormField } from '../../../components/common/FormField';
 import { DashboardScreen } from '../../../components/screens/Dashboard/DashboardScreen';
@@ -52,3 +54,12 @@ export default function NewNamespace() {
     </DashboardScreen>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  try {
+    await getCurrentUser(req, res);
+    return { props: {} };
+  } catch (e) {
+    return { notFound: true };
+  }
+};

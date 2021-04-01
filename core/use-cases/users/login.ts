@@ -1,15 +1,14 @@
-import { castUserToPublic, PublicCustomer } from '../../entities/customer';
-import { CoreError } from '../../errors/CoreError';
+import { PublicUser, userToPublic } from '../../entities/user';
 import { NoSuchUserError } from '../../errors/NoSuchUserError';
 import { ValidationError } from '../../errors/ValidationError';
 import { WrongPasswordError } from '../../errors/WrongPasswordError';
-import { CustomerRepository } from '../../interfaces/CustomerRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
+import { UserRepository } from '../../interfaces/UserRepository';
 
 export function buildLoginUseCase(deps: Dependencies) {
   const { userRepository, passwordManager } = deps;
 
-  return async ({ email, password }: Input): Promise<Output> => {
+  return async ({ email, password }: Input): Promise<PublicUser> => {
     if (!email) {
       throw new ValidationError('Email is required');
     }
@@ -18,7 +17,7 @@ export function buildLoginUseCase(deps: Dependencies) {
       throw new ValidationError('Password is required');
     }
 
-    const user = await userRepository.getCustomerByEmail(email);
+    const user = await userRepository.getUserByEmail(email);
 
     if (!user) {
       throw new NoSuchUserError(email);
@@ -28,16 +27,16 @@ export function buildLoginUseCase(deps: Dependencies) {
       throw new WrongPasswordError();
     }
 
-    return castUserToPublic(user);
+    return userToPublic(user);
   };
 }
 
 type Dependencies = {
-  userRepository: CustomerRepository;
+  userRepository: UserRepository;
   passwordManager: PasswordManager;
 };
+
 interface Input {
   email?: string;
   password?: string;
 }
-type Output = PublicCustomer | CoreError;

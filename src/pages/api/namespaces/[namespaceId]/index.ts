@@ -12,6 +12,7 @@ export default createRoute()
   .delete(async (req, res) => {
     const {
       query: { namespaceId: namespaceIdQuery },
+      user,
     } = req;
 
     const namespaceId = normalizeQueryParam(namespaceIdQuery);
@@ -19,7 +20,7 @@ export default createRoute()
     await removeNamespaceFactory({
       customerRepository,
       namespaceRepository,
-    })({ namespaceId });
+    })({ namespaceId, currentUserId: user!.id });
 
     res.json({});
   });

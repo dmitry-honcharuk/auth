@@ -14,7 +14,11 @@ export default createRoute()
       namespaceRepository,
     });
 
-    res.status(200).json(await getAllNamespaces({ currentUser: user }));
+    res.status(200).json(
+      await getAllNamespaces({
+        currentUserId: user!.id,
+      }),
+    );
   })
   .post(async (req, res) => {
     const {
@@ -28,7 +32,7 @@ export default createRoute()
 
     const result = await addNamespace({
       name,
-      currentUser: user,
+      currentUserId: user!.id,
     });
 
     if (isCoreError(result)) {

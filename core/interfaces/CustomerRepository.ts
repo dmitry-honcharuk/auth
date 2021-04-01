@@ -8,7 +8,7 @@ export interface CustomerRepository {
     namespace: string,
     email: string,
   ): Promise<null | CustomerEntity>;
-  getCustomerInNamespace(namespaceId: string): Promise<CustomerEntity[]>;
+  getCustomersInNamespace(namespaceId: string): Promise<CustomerEntity[]>;
   removeNamespaceCustomers(namespaceId: string): Promise<void>;
 }
 
