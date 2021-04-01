@@ -1,11 +1,9 @@
-import { customerToAuthDTO } from '../../entities/customer';
 import { CoreError } from '../../errors/CoreError';
 import { ValidationError } from '../../errors/ValidationError';
-import { generateSecret } from '../../hasher';
 import { CustomerRepository } from '../../interfaces/CustomerRepository';
 import { NamespaceRepository } from '../../interfaces/NamespaceRepository';
 import { PasswordManager } from '../../interfaces/PasswordManager';
-import { getToken } from '../../utils/jwt';
+import { getCustomerToken } from '../../utils/jwt';
 import { validateEmail, validatePassword } from '../../validation';
 
 export function buildRegisterUseCase(deps: Dependencies) {
@@ -53,13 +51,18 @@ export function buildRegisterUseCase(deps: Dependencies) {
 
     const hashedPassword = passwordManager.hashPassword(password);
 
-    const user = await customerRepository.saveCustomer({
+    const customer = await customerRepository.saveCustomer({
       email,
       password: hashedPassword,
       namespace: namespace.id,
     });
 
-    return getToken(customerToAuthDTO(user), generateSecret());
+    return getCustomerToken(
+      {
+        id: customer.id,
+      },
+      clientId,
+    );
   };
 }
 
