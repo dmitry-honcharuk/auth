@@ -1,4 +1,6 @@
 import { PasswordManager } from '../../core/interfaces/PasswordManager';
+import { createHmac } from 'crypto';
+import { PASSWORD_SECRET } from '../config/env';
 
 export function buildPasswordManager(): PasswordManager {
   return {
@@ -9,5 +11,5 @@ export function buildPasswordManager(): PasswordManager {
 }
 
 function hashPassword(password: string) {
-  return `HASHED_${password}`;
+  return createHmac('sha256', PASSWORD_SECRET).update(password).digest('hex');
 }
