@@ -21,10 +21,10 @@ async function authorizeCustomer(req: NextApiRequest, res: NextApiResponse) {
   const clientId = normalizeQueryParam(clientIdQuery);
   const token = req.headers.authorization.replace('Bearer ', '');
 
-  const authorized = await authorizeCustomerFactory()({
+  const payload = await authorizeCustomerFactory()({
     clientId,
     token,
   });
 
-  return res.status(authorized ? 200 : 401).json({});
+  return res.status(payload ? 200 : 401).json(payload ? payload : {});
 }

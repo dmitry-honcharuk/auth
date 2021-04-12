@@ -17,7 +17,7 @@ export const getToken = (
     });
   });
 
-type CustomerTokenPayload = {
+export type CustomerTokenPayload = {
   id: string;
 };
 

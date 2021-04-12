@@ -1,13 +1,11 @@
-import { getCustomerTokenPayload } from '../../utils/jwt';
+import { CustomerTokenPayload, getCustomerTokenPayload } from '../../utils/jwt';
 
 export function authorizeCustomerFactory() {
-  return async ({ token, clientId }: Input): Promise<boolean> => {
+  return async ({ token, clientId }: Input): Promise<null | CustomerTokenPayload> => {
     try {
-      await getCustomerTokenPayload(token, clientId);
-
-      return true;
+      return await getCustomerTokenPayload(token, clientId);
     } catch (error) {
-      return false;
+      return null;
     }
   };
 }
