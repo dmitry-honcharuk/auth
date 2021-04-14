@@ -4,11 +4,12 @@ type Props = {
   id: string;
   name: string;
   placeholder?: string;
+  type?: 'text' | 'password';
   label?: React.ReactNode;
 };
 
 export const FormField = forwardRef<HTMLInputElement, Props>(
-  ({ id, name, placeholder, label }, ref) => {
+  ({ id, name, placeholder, label, type }, ref) => {
     return (
       <>
         {label && (
@@ -21,6 +22,7 @@ export const FormField = forwardRef<HTMLInputElement, Props>(
           name={name}
           placeholder={placeholder}
           ref={ref}
+          type={type}
           className='w-full px-3 py-2 border border-gray-300 focus:border-black focus:outline-none transition-colors'
         />
       </>

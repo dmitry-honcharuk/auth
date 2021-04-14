@@ -50,12 +50,13 @@ export function RegisterScreen() {
             name='password'
             placeholder='.mYsu_per-secure password! yup'
             label='Password'
+            type='password'
             ref={register({ required: 'Password is required' })}
           />
         </div>
 
         <div className='relative flex justify-between mt-3'>
-          <Link href='/admin/sign-in'>
+          <Link href='/admin/login'>
             <a>I have an account</a>
           </Link>
           <Button type='submit'>Sign up</Button>

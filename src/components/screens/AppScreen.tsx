@@ -4,7 +4,7 @@ import { useAuthState } from '../../hooks/useAuthState';
 import { AppContext } from '../AppContext';
 import { LoadingScreen } from './LoadingScreen';
 
-const AUTH_PAGES = ['/admin/sign-in', '/admin/sign-up'];
+const AUTH_PAGES = ['/admin/login', '/admin/register'];
 
 export const AppScreen: FC = ({ children }) => {
   const { isPending, isLoggedIn, fetchUser } = useAuthState();
@@ -21,7 +21,7 @@ export const AppScreen: FC = ({ children }) => {
       router.pathname.startsWith('/admin') &&
       !isAuthPage
     ) {
-      router.push('/admin/sign-in');
+      router.push('/admin/login');
     }
   }, [isLoggedIn, isPending, router]);
 

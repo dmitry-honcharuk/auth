@@ -1,28 +1,52 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { isEmpty } from 'ramda';
-import { useContext, useState } from 'react';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { login } from '../../services/auth';
-import { AppContext } from '../AppContext';
+import {
+  fetchCustomerByToken,
+  loginCustomer,
+  registerCustomer,
+} from '../../services/auth';
 import { Button } from '../common/Button';
 import { Centered } from '../common/Centered';
 import { FormField } from '../common/FormField';
 
+type Props = {
+  audience: string;
+  clientId: string;
+};
+
 type FormState = { email: string; password: string };
 
-export function LoginScreen() {
+export enum AuthType {
+  Login = 'login',
+  Register = 'register',
+}
+
+export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
   const [error, setError] = useState('');
+  const [authType, setAuthType] = useState(AuthType.Login);
   const { register, handleSubmit, errors } = useForm<FormState>();
-  const router = useRouter();
-  const { fetchCurrentUser } = useContext(AppContext);
 
-  const onSubmit = async (data: FormState) => {
+  const isLogin = authType === AuthType.Login;
+
+  const onSubmit = async ({ email, password }: FormState) => {
     try {
-      await login(data);
-      await fetchCurrentUser();
+      const authorize = isLogin ? loginCustomer : registerCustomer;
 
-      router.push('/admin');
+      const { token } = await authorize({ email, password, clientId });
+      const user = await fetchCustomerByToken({ token, clientId });
+
+      const message: AuthMessage = {
+        auth_token: token,
+        user,
+      };
+
+      window.opener.postMessage(
+        {
+          ficdev_auth: message,
+        },
+        new URL(audience).origin,
+      );
     } catch (error) {
       setError(error.message);
     }
@@ -56,10 +80,18 @@ export function LoginScreen() {
         </div>
 
         <div className='relative flex justify-between mt-3'>
-          <Link href='/admin/register'>
-            <a>I don’t have an account</a>
-          </Link>
-          <Button type='submit'>Sign in</Button>
+          <button
+            className='focus:outline-none'
+            type='button'
+            onClick={() =>
+              setAuthType((type) =>
+                type === AuthType.Login ? AuthType.Register : AuthType.Login,
+              )
+            }
+          >
+            {isLogin ? 'I don’t have an account' : 'I have an account'}
+          </button>
+          <Button type='submit'>{isLogin ? 'Sign in' : 'Sign up'}</Button>
 
           {(error || !isEmpty(errors)) && (
             <div className='absolute -bottom-10 w-full text-center text-xs text-pink-600'>
@@ -72,4 +104,9 @@ export function LoginScreen() {
       </form>
     </Centered>
   );
-}
+};
+
+type AuthMessage = {
+  auth_token: string;
+  user: { id: string };
+};

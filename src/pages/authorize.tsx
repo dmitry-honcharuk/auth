@@ -1,19 +1,22 @@
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
+import { useRouter } from 'next/router';
+import { normalizeQueryParam } from '../backend/utils/normalizeQueryParam';
+import { CustomerAuthScreen } from '../components/screens/CustomerAuthScreen';
 
 export default function Authorize() {
-  return (
-    <Auth0Provider
-      domain='dimahon.eu.auth0.com'
-      clientId='UmBLKgs2F5gzq0SYGxWo9yRJryqXyeeE'
-      redirectUri={window.location.origin}
-    >
-      <App />
-    </Auth0Provider>
-  );
+  const { query } = useRouter();
+
+  const { audience: audienceQuery, clientId: clientIdQuery } = query;
+
+  if (!audienceQuery) {
+    throw new Error('No audience was provided');
+  }
+
+  if (!clientIdQuery) {
+    throw new Error('No client id was provided');
+  }
+
+  const audience = normalizeQueryParam(audienceQuery);
+  const clientId = normalizeQueryParam(clientIdQuery);
+
+  return <CustomerAuthScreen clientId={clientId} audience={audience} />;
 }
-
-const App = () => {
-  const { loginWithRedirect } = useAuth0();
-
-  return <button onClick={() => loginWithRedirect()}>Log In</button>;
-};

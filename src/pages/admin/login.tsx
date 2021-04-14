@@ -1,5 +1,5 @@
 import { LoginScreen } from '../../components/screens/LoginScreen';
 
-export default function SignIn() {
+export default function Login() {
   return <LoginScreen />;
 }

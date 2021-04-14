@@ -1,9 +1,10 @@
+import cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { authorizeCustomerFactory } from '../../../../core/use-cases/customers/authorize';
 import { createRoute } from '../../../backend/utils/createRoute';
 import { normalizeQueryParam } from '../../../backend/utils/normalizeQueryParam';
 
-export default createRoute().get(authorizeCustomer);
+export default createRoute().use(cors()).get(authorizeCustomer);
 
 async function authorizeCustomer(req: NextApiRequest, res: NextApiResponse) {
   const {

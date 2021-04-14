@@ -1,4 +1,4 @@
-export async function post<B extends Record<string, unknown>, T = any>(
+export async function post<T = any, B extends Record<string, unknown> = any>(
   url: string,
   body: B,
 ): Promise<T> {
@@ -22,8 +22,11 @@ export async function post<B extends Record<string, unknown>, T = any>(
   return data;
 }
 
-export async function get<T = any>(url: string): Promise<T> {
-  const response = await fetch(url);
+export async function get<T = any>(
+  url: string,
+  options?: Partial<Request>,
+): Promise<T> {
+  const response = await fetch(url, options);
 
   const data = await response.json();
 
