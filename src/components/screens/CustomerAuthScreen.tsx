@@ -56,7 +56,7 @@ export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
     <Centered>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='transform w-11/12 md:w-1/2 lg:w-1/3 max-w-sm'
+        className='transform w-11/12 md:w-1/2 lg:w-1/3 max-w-sm -translate-y-1/4'
       >
         <div className='mb-5'>
           <FormField
@@ -64,6 +64,7 @@ export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
             name='email'
             placeholder='my.name@example.com'
             label='Email'
+            type='email'
             ref={register({ required: 'Email is required' })}
           />
         </div>

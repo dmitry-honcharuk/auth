@@ -4,7 +4,7 @@ type Props = {
   id: string;
   name: string;
   placeholder?: string;
-  type?: 'text' | 'password';
+  type?: 'text' | 'email' | 'password';
   label?: React.ReactNode;
 };
 
