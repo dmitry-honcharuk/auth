@@ -24,12 +24,15 @@ export enum AuthType {
 
 export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
   const [error, setError] = useState('');
+  const [pending, setPending] = useState(false);
   const [authType, setAuthType] = useState(AuthType.Login);
   const { register, handleSubmit, errors } = useForm<FormState>();
 
   const isLogin = authType === AuthType.Login;
 
   const onSubmit = async ({ email, password }: FormState) => {
+    setPending(true);
+
     try {
       const authorize = isLogin ? loginCustomer : registerCustomer;
 
@@ -50,6 +53,8 @@ export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
     } catch (error) {
       setError(error.message);
     }
+
+    setPending(false);
   };
 
   return (
@@ -92,8 +97,9 @@ export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
           >
             {isLogin ? 'I don’t have an account' : 'I have an account'}
           </button>
-          <Button type='submit'>{isLogin ? 'Sign in' : 'Sign up'}</Button>
-
+          <Button type='submit' disabled={pending}>
+            {isLogin ? 'Sign in' : 'Sign up'}
+          </Button>
           {(error || !isEmpty(errors)) && (
             <div className='absolute -bottom-10 w-full text-center text-xs text-pink-600'>
               <code>

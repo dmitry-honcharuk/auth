@@ -3,6 +3,7 @@ import { forwardRef } from 'react';
 
 type Props = {
   type?: 'submit' | 'reset' | 'button';
+  disabled?: boolean;
   onClick?: () => void;
   className?: string;
   color?: 'default' | 'primary';
@@ -11,7 +12,14 @@ type Props = {
 
 export const Button = forwardRef<HTMLButtonElement, Props>(
   (
-    { children, type = 'button', onClick, className, color = 'default' },
+    {
+      children,
+      disabled,
+      type = 'button',
+      onClick,
+      className,
+      color = 'default',
+    },
     ref,
   ) => {
     return (
@@ -19,6 +27,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         type={type}
         onClick={onClick}
         ref={ref}
+        disabled={disabled}
         className={cn(
           className,
           'border-2',
@@ -27,10 +36,11 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
           'py-1.5',
           'transition-colors',
           {
+            'opacity-50': disabled,
             'border-black hover:bg-gray-500 hover:text-white':
-              color === 'default',
+              color === 'default' && !disabled,
             'border-pink-500 bg-pink-500 hover:bg-pink-600 text-white':
-              color === 'primary',
+              color === 'primary' && !disabled,
           },
         )}
       >
