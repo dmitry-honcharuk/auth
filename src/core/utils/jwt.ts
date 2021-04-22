@@ -1,5 +1,6 @@
 import { sign, SignOptions, verify } from 'jsonwebtoken';
 import { JWT_SECRET } from '../../app/config/env';
+import { CustomerAuthDTO } from '../entities/customer';
 
 export const getToken = (
   payload: any,
@@ -17,17 +18,11 @@ export const getToken = (
     });
   });
 
-export type CustomerTokenPayload = {
-  id: string;
-};
-
-export const getCustomerToken = (
-  payload: CustomerTokenPayload,
-  secret: string,
-) => getToken(payload, secret + JWT_SECRET);
+export const getCustomerToken = (payload: CustomerAuthDTO, secret: string) =>
+  getToken(payload, secret + JWT_SECRET);
 
 export const getCustomerTokenPayload = (token: string, secret: string) =>
-  new Promise<CustomerTokenPayload>((resolve, reject) => {
+  new Promise<CustomerAuthDTO>((resolve, reject) => {
     verify(token, secret + JWT_SECRET, (error, result) => {
       if (error) {
         reject(error);
@@ -39,6 +34,6 @@ export const getCustomerTokenPayload = (token: string, secret: string) =>
         return;
       }
 
-      resolve(result as CustomerTokenPayload);
+      resolve(result as CustomerAuthDTO);
     });
   });

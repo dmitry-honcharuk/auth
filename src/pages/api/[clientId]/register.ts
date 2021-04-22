@@ -13,7 +13,7 @@ export default createRoute().post(registerCustomer);
 async function registerCustomer(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { clientId: clientIdQuery },
-    body: { email, password },
+    body: { email, password, displayName },
   } = req;
 
   const clientId = normalizeQueryParam(clientIdQuery);
@@ -24,7 +24,12 @@ async function registerCustomer(req: NextApiRequest, res: NextApiResponse) {
     namespaceRepository,
   });
 
-  const token = await registerEndUser({ email, password, clientId });
+  const token = await registerEndUser({
+    email,
+    password,
+    clientId,
+    displayName,
+  });
 
   return res.json({ token });
 }

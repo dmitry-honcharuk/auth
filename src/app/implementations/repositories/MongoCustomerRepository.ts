@@ -40,6 +40,7 @@ async function saveCustomer({
   email,
   password,
   namespace: namespaceId,
+  displayName,
 }: SaveUserInput): Promise<CustomerEntity> {
   const customers = await getCustomersCollection();
 
@@ -47,6 +48,7 @@ async function saveCustomer({
     email,
     password,
     namespace: namespaceId,
+    displayName,
   };
 
   const entry = await customers.insertOne({
