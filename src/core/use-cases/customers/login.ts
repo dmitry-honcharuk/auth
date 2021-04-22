@@ -47,6 +47,7 @@ export function buildLoginUseCase(deps: Dependencies) {
     return getCustomerToken(
       {
         id: customer.id,
+        displayName: customer.displayName || customer.email,
       },
       clientId,
     );

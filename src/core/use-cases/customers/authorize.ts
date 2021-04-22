@@ -1,15 +1,15 @@
-import { pick } from 'ramda';
-import { CustomerTokenPayload, getCustomerTokenPayload } from '../../utils/jwt';
+import { CustomerAuthDTO, customerToAuthDTO } from '../../entities/customer';
+import { getCustomerTokenPayload } from '../../utils/jwt';
 
 export function authorizeCustomerFactory() {
   return async ({
     token,
     clientId,
-  }: Input): Promise<null | CustomerTokenPayload> => {
+  }: Input): Promise<null | CustomerAuthDTO> => {
     try {
       const payload = await getCustomerTokenPayload(token, clientId);
 
-      return pick(['id'], payload);
+      return customerToAuthDTO(payload);
     } catch (error) {
       return null;
     }
