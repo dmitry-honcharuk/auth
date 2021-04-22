@@ -1,12 +1,12 @@
 import Cookies from 'cookies';
 import { sign as signJwt } from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { userToAuthDTO } from '../../../core/entities/user';
-import { buildLoginUseCase } from '../../../core/use-cases/users/login';
-import { createRoute } from '../../backend/utils/createRoute';
-import { JWT_COOKIE_NAME, JWT_SECRET } from '../../config/env';
-import { passwordManager } from '../../dependencies/passwordManager';
-import { userRepository } from '../../dependencies/repositories';
+import { createRoute } from '../../app/backend/utils/createRoute';
+import { JWT_COOKIE_NAME, JWT_SECRET } from '../../app/config/env';
+import { passwordManager } from '../../app/dependencies/passwordManager';
+import { userRepository } from '../../app/dependencies/repositories';
+import { userToAuthDTO } from '../../core/entities/user';
+import { buildLoginUseCase } from '../../core/use-cases/users/login';
 
 export default createRoute().post(loginUser);
 

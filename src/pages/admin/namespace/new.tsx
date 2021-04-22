@@ -2,11 +2,11 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { getCurrentUser } from '../../../backend/utils/getCurrentUser';
-import { Button } from '../../../components/common/Button';
-import { FormField } from '../../../components/common/FormField';
-import { DashboardScreen } from '../../../components/screens/Dashboard/DashboardScreen';
-import { createNamespace } from '../../../services/namespaces';
+import { getCurrentUser } from '../../../app/backend/utils/getCurrentUser';
+import { Button } from '../../../app/components/common/Button';
+import { FormField } from '../../../app/components/common/FormField';
+import { DashboardScreen } from '../../../app/components/screens/Dashboard/DashboardScreen';
+import { createNamespace } from '../../../app/services/namespaces';
 
 type FormState = { name: string };
 

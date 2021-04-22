@@ -1,7 +1,7 @@
 import Cookies from 'cookies';
 import { verify } from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { JWT_COOKIE_NAME, JWT_SECRET } from '../../config/env';
+import { JWT_COOKIE_NAME, JWT_SECRET } from '../../app/config/env';
 
 export default async function CurrentUser(
   req: NextApiRequest,

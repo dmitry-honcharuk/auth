@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app';
 import 'tailwindcss/tailwind.css';
-import { AppScreen } from '../components/screens/AppScreen';
+import { AppScreen } from '../app/components/screens/AppScreen';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

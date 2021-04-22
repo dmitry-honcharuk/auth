@@ -1,8 +1,8 @@
 import cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { authorizeCustomerFactory } from '../../../../core/use-cases/customers/authorize';
-import { createRoute } from '../../../backend/utils/createRoute';
-import { normalizeQueryParam } from '../../../backend/utils/normalizeQueryParam';
+import { createRoute } from '../../../app/backend/utils/createRoute';
+import { normalizeQueryParam } from '../../../app/backend/utils/normalizeQueryParam';
+import { authorizeCustomerFactory } from '../../../core/use-cases/customers/authorize';
 
 export default createRoute().use(cors()).get(authorizeCustomer);
 

@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { buildRegisterUseCase } from '../../../../core/use-cases/customers/register';
-import { createRoute } from '../../../backend/utils/createRoute';
-import { normalizeQueryParam } from '../../../backend/utils/normalizeQueryParam';
-import { passwordManager } from '../../../dependencies/passwordManager';
+import { createRoute } from '../../../app/backend/utils/createRoute';
+import { normalizeQueryParam } from '../../../app/backend/utils/normalizeQueryParam';
+import { passwordManager } from '../../../app/dependencies/passwordManager';
 import {
   customerRepository,
   namespaceRepository,
-} from '../../../dependencies/repositories';
+} from '../../../app/dependencies/repositories';
+import { buildRegisterUseCase } from '../../../core/use-cases/customers/register';
 
 export default createRoute().post(registerCustomer);
 

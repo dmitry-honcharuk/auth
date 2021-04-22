@@ -1,5 +1,5 @@
-import { PasswordManager } from '../../core/interfaces/PasswordManager';
 import { createHmac } from 'crypto';
+import { PasswordManager } from '../../core/interfaces/PasswordManager';
 import { PASSWORD_SECRET } from '../config/env';
 
 export function buildPasswordManager(): PasswordManager {

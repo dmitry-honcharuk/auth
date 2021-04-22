@@ -1,11 +1,11 @@
-import { removeNamespaceFactory } from '../../../../../core/use-cases/users/remove-namespace';
-import { createRoute } from '../../../../backend/utils/createRoute';
-import { normalizeQueryParam } from '../../../../backend/utils/normalizeQueryParam';
+import { createRoute } from '../../../../app/backend/utils/createRoute';
+import { normalizeQueryParam } from '../../../../app/backend/utils/normalizeQueryParam';
 import {
   customerRepository,
   namespaceRepository,
-} from '../../../../dependencies/repositories';
-import { protectedRoute } from '../../../../middlewares/protectedRoute';
+} from '../../../../app/dependencies/repositories';
+import { protectedRoute } from '../../../../app/middlewares/protectedRoute';
+import { removeNamespaceFactory } from '../../../../core/use-cases/users/remove-namespace';
 
 export default createRoute()
   .use(protectedRoute)

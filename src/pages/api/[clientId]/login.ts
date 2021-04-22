@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { buildLoginUseCase } from '../../../../core/use-cases/customers/login';
-import { createRoute } from '../../../backend/utils/createRoute';
-import { normalizeQueryParam } from '../../../backend/utils/normalizeQueryParam';
-import { passwordManager } from '../../../dependencies/passwordManager';
+import { createRoute } from '../../../app/backend/utils/createRoute';
+import { normalizeQueryParam } from '../../../app/backend/utils/normalizeQueryParam';
+import { passwordManager } from '../../../app/dependencies/passwordManager';
 import {
   customerRepository,
   namespaceRepository,
-} from '../../../dependencies/repositories';
+} from '../../../app/dependencies/repositories';
+import { buildLoginUseCase } from '../../../core/use-cases/customers/login';
 
 export default createRoute().post(loginCustomer);
 

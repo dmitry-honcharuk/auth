@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import { normalizeQueryParam } from '../backend/utils/normalizeQueryParam';
-import { CustomerAuthScreen } from '../components/screens/CustomerAuthScreen';
+import { normalizeQueryParam } from '../app/backend/utils/normalizeQueryParam';
+import { CustomerAuthScreen } from '../app/components/screens/CustomerAuthScreen';
 
 export default function Authorize() {
   const { query } = useRouter();

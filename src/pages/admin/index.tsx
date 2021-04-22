@@ -1,11 +1,11 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { NamespaceEntity } from '../../../core/entities/namespace';
-import { createListNamespacesUseCase } from '../../../core/use-cases/users/list-namespaces';
-import { getCurrentUser } from '../../backend/utils/getCurrentUser';
-import { Button } from '../../components/common/Button';
-import { DashboardScreen } from '../../components/screens/Dashboard/DashboardScreen';
-import { namespaceRepository } from '../../dependencies/repositories';
+import { getCurrentUser } from '../../app/backend/utils/getCurrentUser';
+import { Button } from '../../app/components/common/Button';
+import { DashboardScreen } from '../../app/components/screens/Dashboard/DashboardScreen';
+import { namespaceRepository } from '../../app/dependencies/repositories';
+import { NamespaceEntity } from '../../core/entities/namespace';
+import { createListNamespacesUseCase } from '../../core/use-cases/users/list-namespaces';
 
 export default function Dashboard({ namespaces }: Props) {
   const header = (

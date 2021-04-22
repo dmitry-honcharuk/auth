@@ -1,9 +1,9 @@
-import { createAddNamespaceUseCase } from '../../../../core/use-cases/users/add-namespace';
-import { createListNamespacesUseCase } from '../../../../core/use-cases/users/list-namespaces';
-import { isCoreError } from '../../../../core/utils';
-import { createRoute } from '../../../backend/utils/createRoute';
-import { namespaceRepository } from '../../../dependencies/repositories';
-import { protectedRoute } from '../../../middlewares/protectedRoute';
+import { createRoute } from '../../../app/backend/utils/createRoute';
+import { namespaceRepository } from '../../../app/dependencies/repositories';
+import { protectedRoute } from '../../../app/middlewares/protectedRoute';
+import { createAddNamespaceUseCase } from '../../../core/use-cases/users/add-namespace';
+import { createListNamespacesUseCase } from '../../../core/use-cases/users/list-namespaces';
+import { isCoreError } from '../../../core/utils';
 
 export default createRoute()
   .use(protectedRoute)

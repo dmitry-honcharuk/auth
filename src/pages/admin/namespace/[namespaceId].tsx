@@ -1,16 +1,16 @@
 import { GetServerSideProps } from 'next';
-import { PublicCustomer } from '../../../../core/entities/customer';
-import { NamespaceEntity } from '../../../../core/entities/namespace';
-import { getNamespaceFactory } from '../../../../core/use-cases/users/get-namespace';
-import { listNamespaceCustomersFactory } from '../../../../core/use-cases/users/list-namespace-customers';
-import { getCurrentUser } from '../../../backend/utils/getCurrentUser';
-import { DashboardContent } from '../../../components/screens/Dashboard/DashboardContent';
-import { DashboardScreen } from '../../../components/screens/Dashboard/DashboardScreen';
-import { Header } from '../../../components/screens/Dashboard/Header';
+import { getCurrentUser } from '../../../app/backend/utils/getCurrentUser';
+import { DashboardContent } from '../../../app/components/screens/Dashboard/DashboardContent';
+import { DashboardScreen } from '../../../app/components/screens/Dashboard/DashboardScreen';
+import { Header } from '../../../app/components/screens/Dashboard/Header';
 import {
   customerRepository,
   namespaceRepository,
-} from '../../../dependencies/repositories';
+} from '../../../app/dependencies/repositories';
+import { PublicCustomer } from '../../../core/entities/customer';
+import { NamespaceEntity } from '../../../core/entities/namespace';
+import { getNamespaceFactory } from '../../../core/use-cases/users/get-namespace';
+import { listNamespaceCustomersFactory } from '../../../core/use-cases/users/list-namespace-customers';
 
 export default function Dashboard({ namespace, customers }: Props) {
   return (
