@@ -60,7 +60,7 @@ export function buildRegisterUseCase(deps: Dependencies) {
       email,
       password: hashedPassword,
       namespace: namespace.id,
-      displayName,
+      displayName: displayName || null,
     });
 
     return getCustomerToken(

@@ -5,7 +5,7 @@ export type CustomerEntity = {
   email: string;
   password: string;
   namespace: string;
-  displayName?: string;
+  displayName?: string | null;
 };
 
 export type PublicCustomer = Omit<CustomerEntity, 'password'>;

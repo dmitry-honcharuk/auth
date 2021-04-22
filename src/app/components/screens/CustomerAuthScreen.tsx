@@ -38,13 +38,13 @@ export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
 
   const isLogin = authType === AuthType.Login;
 
-  const onSubmit = async ({ email, password }: FormState) => {
+  const onSubmit = async ({ email, password, displayName }: FormState) => {
     setPending(true);
 
     try {
       const { token } = isLogin
         ? await loginCustomer({ email, password, clientId })
-        : await registerCustomer({ email, password, clientId });
+        : await registerCustomer({ email, password, clientId, displayName });
 
       const user = await fetchCustomerByToken({ token, clientId });
 
@@ -52,6 +52,10 @@ export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
         auth_token: token,
         user,
       };
+
+      if (!window.opener) {
+        return;
+      }
 
       window.opener.postMessage(
         {

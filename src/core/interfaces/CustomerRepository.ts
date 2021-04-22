@@ -16,5 +16,5 @@ export type SaveUserInput = {
   email: string;
   password: string;
   namespace: string;
-  displayName?: string;
+  displayName: string | null;
 };
