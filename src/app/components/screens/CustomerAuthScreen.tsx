@@ -15,7 +15,11 @@ type Props = {
   clientId: string;
 };
 
-type FormState = { email: string; password: string };
+type FormState = {
+  email: string;
+  password: string;
+  displayName?: string;
+};
 
 export enum AuthType {
   Login = 'login',
@@ -26,23 +30,32 @@ export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
   const [error, setError] = useState('');
   const [pending, setPending] = useState(false);
   const [authType, setAuthType] = useState(AuthType.Login);
-  const { register, handleSubmit, errors } = useForm<FormState>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormState>();
 
   const isLogin = authType === AuthType.Login;
 
-  const onSubmit = async ({ email, password }: FormState) => {
+  const onSubmit = async ({ email, password, displayName }: FormState) => {
     setPending(true);
 
     try {
-      const authorize = isLogin ? loginCustomer : registerCustomer;
+      const { token } = isLogin
+        ? await loginCustomer({ email, password, clientId })
+        : await registerCustomer({ email, password, clientId, displayName });
 
-      const { token } = await authorize({ email, password, clientId });
       const user = await fetchCustomerByToken({ token, clientId });
 
       const message: AuthMessage = {
         auth_token: token,
         user,
       };
+
+      if (!window.opener) {
+        return;
+      }
 
       window.opener.postMessage(
         {
@@ -61,29 +74,38 @@ export const CustomerAuthScreen: FC<Props> = ({ audience, clientId }) => {
     <Centered>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='transform w-11/12 md:w-1/2 lg:w-1/3 max-w-sm -translate-y-1/4'
+        className='transform w-11/12 md:w-1/2 lg:w-1/3 max-w-sm -translate-y-1/5'
       >
         <div className='mb-5'>
           <FormField
             id='email'
-            name='email'
             placeholder='my.name@example.com'
             label='Email'
             type='email'
-            ref={register({ required: 'Email is required' })}
+            {...register('email', { required: 'Email is required' })}
           />
         </div>
 
-        <div>
+        <div className='mb-5'>
           <FormField
             id='password'
-            name='password'
             placeholder='.mYsu_per-secure password! yup'
             label='Password'
             type='password'
-            ref={register({ required: 'Password is required' })}
+            {...register('password', { required: 'Password is required' })}
           />
         </div>
+
+        {!isLogin && (
+          <div>
+            <FormField
+              id='displayName'
+              placeholder='your email will be used instead'
+              label='Display name [optional]'
+              {...register('displayName')}
+            />
+          </div>
+        )}
 
         <div className='relative flex justify-between mt-3'>
           <button

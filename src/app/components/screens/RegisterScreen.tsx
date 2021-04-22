@@ -13,7 +13,11 @@ type FormState = { email: string; password: string };
 
 export function RegisterScreen() {
   const [error, setError] = useState('');
-  const { register, handleSubmit, errors } = useForm<FormState>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormState>();
   const router = useRouter();
   const { fetchCurrentUser } = useContext(AppContext);
 
@@ -37,21 +41,19 @@ export function RegisterScreen() {
         <div className='mb-5'>
           <FormField
             id='email'
-            name='email'
             placeholder='my.name@example.com'
             label='Email'
-            ref={register({ required: 'Email is required' })}
+            {...register('email', { required: 'Email is required' })}
           />
         </div>
 
         <div>
           <FormField
             id='password'
-            name='password'
             placeholder='.mYsu_per-secure password! yup'
             label='Password'
             type='password'
-            ref={register({ required: 'Password is required' })}
+            {...register('password', { required: 'Password is required' })}
           />
         </div>
 

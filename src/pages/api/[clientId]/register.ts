@@ -18,13 +18,13 @@ async function registerCustomer(req: NextApiRequest, res: NextApiResponse) {
 
   const clientId = normalizeQueryParam(clientIdQuery);
 
-  const registerEndUser = buildRegisterUseCase({
+  const registerCustomer = buildRegisterUseCase({
     customerRepository: customerRepository,
     passwordManager,
     namespaceRepository,
   });
 
-  const token = await registerEndUser({
+  const token = await registerCustomer({
     email,
     password,
     clientId,
