@@ -1,4 +1,5 @@
 import { pick } from 'ramda';
+import { CustomerAuthDTO } from '../../core/entities/customer';
 import { get, post } from './api';
 
 export function login(creds: Creds) {
@@ -24,10 +25,10 @@ export function loginCustomer(creds: CustomerCreds) {
   );
 }
 
-export function registerCustomer(creds: CustomerCreds) {
+export function registerCustomer(creds: CustomerRegisterCreds) {
   return post<{ token: string }>(
     `/api/${creds.clientId}/register`,
-    pick(['email', 'password'], creds),
+    pick(['email', 'password', 'displayName'], creds),
   );
 }
 
@@ -39,7 +40,7 @@ export function fetchCustomerByToken(creds: {
 
   headers.append('authorization', `Bearer ${creds.token}`);
 
-  return get<{ id: string }>(`/api/${creds.clientId}/authorize`, { headers });
+  return get<CustomerAuthDTO>(`/api/${creds.clientId}/authorize`, { headers });
 }
 
 type Creds = {
@@ -49,4 +50,8 @@ type Creds = {
 
 type CustomerCreds = Creds & {
   clientId: string;
+};
+
+type CustomerRegisterCreds = CustomerCreds & {
+  displayName?: string;
 };

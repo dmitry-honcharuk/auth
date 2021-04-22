@@ -11,7 +11,11 @@ import { createNamespace } from '../../../app/services/namespaces';
 type FormState = { name: string };
 
 export default function NewNamespace() {
-  const { register, handleSubmit, errors } = useForm<FormState>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormState>();
   const { push } = useRouter();
 
   const onSubmit = async ({ name }: FormState) => {
@@ -30,9 +34,8 @@ export default function NewNamespace() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormField
             id='name'
-            name='name'
             label='Namespace name'
-            ref={register({ required: 'Name is required' })}
+            {...register('name', { required: 'Name is required' })}
           />
           <footer className='mt-3'>
             <div className='flex justify-between items-center'>
