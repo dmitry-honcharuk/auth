@@ -43,7 +43,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
   res,
 }) => {
-  console.log('redeploy');
   try {
     const user = await getCurrentUser(req, res);
 
