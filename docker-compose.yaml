@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-volume:/bitnami
+
+volumes:
+  mongodb-volume:
+    labels:
+      - keep
