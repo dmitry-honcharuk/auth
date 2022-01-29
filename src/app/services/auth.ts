@@ -18,17 +18,23 @@ export function getCurrentUser() {
   return get('/api/current');
 }
 
+export function requestPasswordReset(creds: Omit<CustomerCreds, 'password'>) {
+  return post<void>(`/api/${creds.clientId}/request-password-reset`, {
+    email: creds.email,
+  });
+}
+
 export function loginCustomer(creds: CustomerCreds) {
   return post<{ token: string }>(
     `/api/${creds.clientId}/login`,
-    pick(['email', 'password'], creds),
+    pick(['email', 'password'], creds)
   );
 }
 
 export function registerCustomer(creds: CustomerRegisterCreds) {
   return post<{ token: string }>(
     `/api/${creds.clientId}/register`,
-    pick(['email', 'password', 'displayName'], creds),
+    pick(['email', 'password', 'displayName'], creds)
   );
 }
 
